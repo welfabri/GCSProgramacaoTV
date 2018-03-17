@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GCSProgramacaoTV.Views.MainPage"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             Title="{Binding Title}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="{Binding DataAtual}" Margin="10" />
+            <Button Text="Atualizar" Command="{Binding CmdAtualizar}" />
+        </StackLayout>
+        
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <ListView x:Name="LstCanais" 
+                      ItemsSource="{Binding ListaCanais}" 
+                      SelectedItem="{Binding CanalSelecionado, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="#fff" Orientation="Vertical" Padding="5,0,5,1">
+                                <Label Text="{Binding Nome}" HorizontalOptions="StartAndExpand" 
+                                       FontAttributes="Bold" />                                    
+                                <Label Text="{Binding ProgramaAtual}" HorizontalOptions="StartAndExpand" 
+                                       TextColor="#503026" FontSize="Micro" VerticalOptions="StartAndExpand" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ListView Grid.Column="1" x:Name="LstProximosProgamas" 
+                      ItemsSource="{Binding ListaProgramas}" 
+                      SelectedItem="{Binding ProgramaSelecionado}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="#eee" Orientation="Vertical" Padding="5,0,5,1">
+                                <Label Text="{Binding Nome}" TextColor="#f35e20" 
+                                       HorizontalOptions="Start" />
+                                <Label Text="{Binding Horario}" HorizontalOptions="StartAndExpand" 
+                                       TextColor="#503026" VerticalOptions="StartAndExpand" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+
+</ContentPage>
