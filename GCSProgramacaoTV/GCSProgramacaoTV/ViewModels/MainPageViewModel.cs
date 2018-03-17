@@ -6,6 +6,7 @@ using Prism.Navigation;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
@@ -15,12 +16,15 @@ namespace GCSProgramacaoTV.ViewModels
         private Programa _programaSelecionado;
         private Canal _canalSelecionado;
         private string _dataAtual;
+        private bool _estaCarregando = false;
 
         public String DataAtual
         {
             get => _dataAtual; 
             set => SetProperty(ref _dataAtual, value);
         }
+
+        public bool EstaCarregando { get => _estaCarregando; set => SetProperty(ref _estaCarregando, value); }
 
         public ObservableCollection<Canal> ListaCanais { get; set; }
         public ObservableCollection<Programa> ListaProgramas { get; set; }
@@ -73,7 +77,7 @@ namespace GCSProgramacaoTV.ViewModels
             });
         }
 
-        private void IniciaCanais()
+        private async void IniciaCanais()
         {
             /*
              * Exemplo de como devolve o nó de canais
@@ -96,7 +100,7 @@ namespace GCSProgramacaoTV.ViewModels
 
             HtmlWeb web = new HtmlWeb();
 
-            var htmlDoc = web.Load(html);
+            var htmlDoc = await web.LoadFromWebAsync(html);
 
             var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
 
@@ -133,7 +137,7 @@ namespace GCSProgramacaoTV.ViewModels
             DevolveListaProgramas();
         }
 
-        private void DevolveListaProgramas()
+        private async void DevolveListaProgramas()
         {
             /*
              * 
@@ -155,7 +159,7 @@ namespace GCSProgramacaoTV.ViewModels
 
             HtmlWeb web = new HtmlWeb();
 
-            var htmlDoc = web.Load(html);
+            var htmlDoc = await web.LoadFromWebAsync(html);
 
             var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
 
@@ -194,8 +198,21 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void DoAtualizar()
         {
-            AtualizaDataAtual();
-            IniciaCanais();
+            this.EstaCarregando = true;
+
+            try
+            {
+                AtualizaDataAtual();
+                IniciaCanais();
+            }
+            catch(Exception ex)
+            {
+                this.DataAtual = ex.Message;
+            }
+            finally
+            {
+                this.EstaCarregando = false;
+            }
         }
 
         void AtualizaDataAtual()

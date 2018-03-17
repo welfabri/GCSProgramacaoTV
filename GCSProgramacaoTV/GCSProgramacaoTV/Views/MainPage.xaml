@@ -8,16 +8,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackLayout Orientation="Horizontal">
+        <ActivityIndicator IsRunning="{Binding EstaCarregando}"
+            IsVisible="{Binding EstaCarregando}" Color="Red"/>
+        
+        <StackLayout Grid.Row="1" Orientation="Horizontal">
             <Label Text="{Binding DataAtual}" Margin="10" />
             <Button Text="Atualizar" Command="{Binding CmdAtualizar}" />
         </StackLayout>
         
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
