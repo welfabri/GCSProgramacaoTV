@@ -2,26 +2,22 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GCSProgramacaoTV.Views.MainPage"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              Title="{Binding Title}">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ActivityIndicator IsRunning="{Binding EstaCarregando}"
-            IsVisible="{Binding EstaCarregando}" Color="Red"/>
-        
-        <StackLayout Grid.Row="1" Orientation="Horizontal">
+        <StackLayout Grid.Row="0" Orientation="Horizontal">
             <Label Text="{Binding DataAtual}" Margin="10" />
             <Button Text="Atualizar" Command="{Binding CmdAtualizar}" />
         </StackLayout>
-        
 
-        <Grid Grid.Row="2">
+
+        <Grid Grid.Row="1">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -35,7 +31,7 @@
                         <ViewCell>
                             <StackLayout BackgroundColor="#fff" Orientation="Vertical" Padding="5,0,5,1">
                                 <Label Text="{Binding Nome}" HorizontalOptions="StartAndExpand" 
-                                       FontAttributes="Bold" />                                    
+                                       FontAttributes="Bold" />
                                 <Label Text="{Binding ProgramaAtual}" HorizontalOptions="StartAndExpand" 
                                        TextColor="#503026" FontSize="Micro" VerticalOptions="StartAndExpand" />
                             </StackLayout>
@@ -60,7 +56,12 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Grid>
-    </Grid>
 
+        </Grid>
+
+        <ActivityIndicator IsRunning="{Binding EstaCarregando}"
+            IsVisible="{Binding EstaCarregando}" Color="Red"
+                       VerticalOptions="FillAndExpand" 
+                       HorizontalOptions="FillAndExpand" />
+    </Grid>
 </ContentPage>

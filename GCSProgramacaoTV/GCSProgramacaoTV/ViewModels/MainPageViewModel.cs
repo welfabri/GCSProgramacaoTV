@@ -20,7 +20,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         public String DataAtual
         {
-            get => _dataAtual; 
+            get => _dataAtual;
             set => SetProperty(ref _dataAtual, value);
         }
 
@@ -29,18 +29,31 @@ namespace GCSProgramacaoTV.ViewModels
         public ObservableCollection<Canal> ListaCanais { get; set; }
         public ObservableCollection<Programa> ListaProgramas { get; set; }
 
-        public Canal CanalSelecionado { get => _canalSelecionado; set { SetProperty(ref _canalSelecionado, value); SelecionouCanal(); } }       
+        public Canal CanalSelecionado { get => _canalSelecionado; set { SetProperty(ref _canalSelecionado, value); SelecionouCanal(); } }
 
         public Programa ProgramaSelecionado { get => _programaSelecionado; set { SetProperty(ref _programaSelecionado, value); SelecionouPrograma(); } }
 
         public DelegateCommand CmdAtualizar { get; set; }
 
-        public MainPageViewModel(INavigationService navigationService) 
-            : base (navigationService)
+        public MainPageViewModel(INavigationService navigationService)
+            : base(navigationService)
         {
             Title = "Programação da TV";
 
-            IniciaSistema();
+            this.EstaCarregando = true;
+
+            try
+            {
+                IniciaSistema();
+            }
+            catch (Exception ex)
+            {
+                this.DataAtual = ex.Message;
+            }
+            finally
+            {
+                this.EstaCarregando = false;
+            }
         }
 
         private void IniciaSistema()
@@ -48,7 +61,7 @@ namespace GCSProgramacaoTV.ViewModels
             IniciaListas();
             IniciaCommands();
             IniciaTimer();
-            IniciaCanais();            
+            IniciaCanais();
         }
 
         private void IniciaListas()
@@ -77,7 +90,7 @@ namespace GCSProgramacaoTV.ViewModels
             });
         }
 
-        private async void IniciaCanais()
+        private async Task IniciaCanais()
         {
             /*
              * Exemplo de como devolve o nó de canais
@@ -123,13 +136,13 @@ namespace GCSProgramacaoTV.ViewModels
                                 Nome = d?.InnerHtml.Replace("&amp;", "&"),
                                 Numero = 0,
                                 ProgramaAtual = node.Attributes["title"]?.Value
-                            };                            
+                            };
 
                             this.ListaCanais.Add(cnl);
                         }
                     }
                 }
-            }            
+            }
         }
 
         private void SelecionouCanal()
@@ -137,7 +150,7 @@ namespace GCSProgramacaoTV.ViewModels
             DevolveListaProgramas();
         }
 
-        private async void DevolveListaProgramas()
+        private async Task DevolveListaProgramas()
         {
             /*
              * 
@@ -180,7 +193,7 @@ namespace GCSProgramacaoTV.ViewModels
 
                         prg.Horario = c?.InnerHtml;
 
-                        this.ListaProgramas.Add(prg);                        
+                        this.ListaProgramas.Add(prg);
                     }
                 }
             }
@@ -191,21 +204,21 @@ namespace GCSProgramacaoTV.ViewModels
             //Abrir tela com a sinopse
             if (ProgramaSelecionado != null)
             {
-                NavigationParameters n = new NavigationParameters("id=" + ProgramaSelecionado.Id);                
+                NavigationParameters n = new NavigationParameters("id=" + ProgramaSelecionado.Id);
                 await NavigationService.NavigateAsync("NavigationPage/DetalhePrograma", n);
             }
         }
 
-        private void DoAtualizar()
+        private async void DoAtualizar()
         {
             this.EstaCarregando = true;
 
             try
             {
                 AtualizaDataAtual();
-                IniciaCanais();
+                await IniciaCanais();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.DataAtual = ex.Message;
             }
