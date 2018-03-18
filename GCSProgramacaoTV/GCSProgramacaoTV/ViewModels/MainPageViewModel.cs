@@ -225,7 +225,7 @@ namespace GCSProgramacaoTV.ViewModels
                             //var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "time").FirstOrDefault();
                             var c = node.Descendants("div").FirstOrDefault();
 
-                            prg.Horario = c?.InnerHtml;
+                            prg.Horario = c?.InnerHtml; 
 
                             this.ListaProgramas.Add(prg);
                         }
@@ -250,7 +250,8 @@ namespace GCSProgramacaoTV.ViewModels
                 NavigationParameters n = new NavigationParameters("id=" + ProgramaSelecionado.Id)
                 {
                     { "nomePrograma", ProgramaSelecionado.Nome },
-                    { "horario", ProgramaSelecionado.Horario }
+                    { "horario", ProgramaSelecionado.Horario },
+                    { "canal", CanalSelecionado.Nome }
                 };
                 await NavigationService.NavigateAsync("NavigationPage/DetalhePrograma", n);
             }

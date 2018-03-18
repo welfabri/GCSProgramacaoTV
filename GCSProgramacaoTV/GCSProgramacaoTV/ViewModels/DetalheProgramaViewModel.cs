@@ -17,6 +17,7 @@ namespace GCSProgramacaoTV.ViewModels
         private string _sinopse;
         private string _title;
         private string _horario;
+        private string _canal;
 
         public string NomePrograma { get => _nomePrograma; set { SetProperty(ref _nomePrograma, value); Title = value; } }
 
@@ -24,7 +25,10 @@ namespace GCSProgramacaoTV.ViewModels
 
         public string Sinopse { get => _sinopse; set => SetProperty(ref _sinopse, value); }
 
-        public string Horario { get => _horario; set => SetProperty(ref _horario, value); }
+        public string Horario { get => _horario; set { SetProperty(ref _horario, value); this.CmdLembrar.RaiseCanExecuteChanged(); } }
+
+        public DateTime HorarioDateTime => DateTime.ParseExact(this.Horario, "HH:mm",
+             CultureInfo.InvariantCulture);
 
         public DelegateCommand CmdLembrar { get; set; }
 
@@ -40,7 +44,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         private bool CanLembrar()
         {
-            return true;
+            return (this.Horario != null) && (this.HorarioDateTime > DateTime.Now);
         }
 
         private void DoLembrar()
@@ -48,10 +52,9 @@ namespace GCSProgramacaoTV.ViewModels
             try
             {
                 //Passar a data também
-                DateTime dateTime = DateTime.ParseExact(this.Horario, "HH:mm",
-                                            CultureInfo.InvariantCulture);
-                CrossLocalNotifications.Current.Show("Lembrar de Programação", "vai começar o programa " + this.NomePrograma,
-                    1, dateTime);
+                CrossLocalNotifications.Current.Show("Lembrete de Programação", 
+                    $"{this.NomePrograma} no canal { this._canal}",
+                    DateTime.Now.Minute + DateTime.Now.Second, this.HorarioDateTime);
                 DependencyService.Get<IMessage>().LongAlert("Lembrete adicionado");
             }
             catch(Exception ex)
@@ -73,6 +76,9 @@ namespace GCSProgramacaoTV.ViewModels
 
                 if (parameters.ContainsKey("horario"))
                     this.Horario = (string)parameters["horario"];
+
+                if (parameters.ContainsKey("canal"))
+                    this._canal = (string)parameters["canal"];
             }
         }
 
@@ -82,7 +88,7 @@ namespace GCSProgramacaoTV.ViewModels
             //    MostraDetalhes((string)parameters["id"]);
         }
 
-        private void MostraDetalhes(string id)
+        private async void MostraDetalhes(string id)
         {
             /*
              * 
@@ -143,7 +149,7 @@ namespace GCSProgramacaoTV.ViewModels
 
             try
             {
-                var htmlDoc = web.Load(html);
+                var htmlDoc = await web.LoadFromWebAsync(html);
 
                 var noTitulo = htmlDoc.DocumentNode.SelectSingleNode("//div/div/h1");
                 NomePrograma = noTitulo?.InnerHtml;
