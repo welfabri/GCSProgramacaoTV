@@ -75,7 +75,7 @@ namespace GCSProgramacaoTV.ViewModels
             IniciaListas();
             IniciaCommands();
             IniciaTimer();
-            IniciaCanais();
+            DoAtualizar();
         }
 
         private void IniciaListas()
@@ -123,42 +123,57 @@ namespace GCSProgramacaoTV.ViewModels
              </li>
              */
 
-            this.ListaCanais.Clear();
-            this._todosCanais.Clear();
-            string html = Constantes.BASEURL + @"/programacao/categoria/Todos";
+            this.EstaCarregando = true;
 
-            HtmlWeb web = new HtmlWeb();
-
-            var htmlDoc = await web.LoadFromWebAsync(html);
-
-            var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
-
-            if (nodes != null)
+            try
             {
-                foreach (HtmlNode node in nodes)
+                this._todosCanais.Clear();
+                this.ListaCanais.Clear();
+                this.ListaProgramas.Clear();
+                
+                string html = Constantes.BASEURL + @"/programacao/categoria/Todos";
+
+                HtmlWeb web = new HtmlWeb();
+
+                var htmlDoc = await web.LoadFromWebAsync(html);
+
+                var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
+
+                if (nodes != null)
                 {
-                    if (node != null && node.Attributes["title"] != null)
+                    foreach (HtmlNode node in nodes)
                     {
-                        var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "licontent").FirstOrDefault();
-
-                        if (c != null)
+                        if (node != null && node.Attributes["title"] != null)
                         {
-                            //Pega o programa atual que está na tag h2
-                            var d = c.ChildNodes.Where(x => x.Name == "h2").FirstOrDefault();
+                            var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "licontent").FirstOrDefault();
 
-                            Canal cnl = new Canal()
+                            if (c != null)
                             {
-                                Id = node.Attributes["href"]?.Value,
-                                Nome = d?.InnerHtml.Replace("&amp;", "&"),
-                                Numero = 0,
-                                ProgramaAtual = node.Attributes["title"]?.Value
-                            };
+                                //Pega o programa atual que está na tag h2
+                                var d = c.ChildNodes.Where(x => x.Name == "h2").FirstOrDefault();
 
-                            this.ListaCanais.Add(cnl);
-                            this._todosCanais.Add(cnl);
+                                Canal cnl = new Canal()
+                                {
+                                    Id = node.Attributes["href"]?.Value,
+                                    Nome = d?.InnerHtml.Replace("&amp;", "&"),
+                                    Numero = 0,
+                                    ProgramaAtual = node.Attributes["title"]?.Value
+                                };
+
+                                this.ListaCanais.Add(cnl);
+                                this._todosCanais.Add(cnl);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                this.DataAtual = ex.Message;
+            }
+            finally
+            {
+                this.EstaCarregando = false;
             }
         }
 
@@ -183,36 +198,50 @@ namespace GCSProgramacaoTV.ViewModels
              </li>
              */
 
-            this.ListaProgramas.Clear();
 
-            string html = Constantes.BASEURL + this.CanalSelecionado.Id;
+            this.EstaCarregando = true;
 
-            HtmlWeb web = new HtmlWeb();
-
-            var htmlDoc = await web.LoadFromWebAsync(html);
-
-            var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
-
-            if (nodes != null)
+            try
             {
-                foreach (HtmlNode node in nodes)
+                this.ListaProgramas.Clear();
+
+                string html = Constantes.BASEURL + this.CanalSelecionado.Id;
+
+                HtmlWeb web = new HtmlWeb();
+
+                var htmlDoc = await web.LoadFromWebAsync(html);
+
+                var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
+
+                if (nodes != null)
                 {
-                    if (node != null && node.Attributes["title"] != null)
+                    foreach (HtmlNode node in nodes)
                     {
-                        Programa prg = new Programa()
+                        if (node != null && node.Attributes["title"] != null)
                         {
-                            Id = node.Attributes["href"].Value,
-                            Nome = node.Attributes["title"].Value
-                        };
+                            Programa prg = new Programa()
+                            {
+                                Id = node.Attributes["href"].Value,
+                                Nome = node.Attributes["title"].Value
+                            };
 
-                        //var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "time").FirstOrDefault();
-                        var c = node.Descendants("div").FirstOrDefault();
+                            //var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "time").FirstOrDefault();
+                            var c = node.Descendants("div").FirstOrDefault();
 
-                        prg.Horario = c?.InnerHtml;
+                            prg.Horario = c?.InnerHtml;
 
-                        this.ListaProgramas.Add(prg);
+                            this.ListaProgramas.Add(prg);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                this.DataAtual = ex.Message;
+            }
+            finally
+            {
+                this.EstaCarregando = false;
             }
         }
 
@@ -232,21 +261,9 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async void DoAtualizar()
         {
-            this.EstaCarregando = true;
-
-            try
-            {
-                AtualizaDataAtual();
-                await IniciaCanais();
-            }
-            catch (Exception ex)
-            {
-                this.DataAtual = ex.Message;
-            }
-            finally
-            {
-                this.EstaCarregando = false;
-            }
+            
+            AtualizaDataAtual();
+            await IniciaCanais();
         }
 
         private void BuscaCanaisPeloTexto()
