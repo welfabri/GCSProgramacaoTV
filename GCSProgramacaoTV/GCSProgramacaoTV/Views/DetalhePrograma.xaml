@@ -12,8 +12,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--<Label Text="{Binding NomePrograma}" />-->
-        <Button Text="Lembrar" Command="{Binding CmdLembrar}"></Button>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="{Binding Horario}" VerticalTextAlignment="Center" />
+            <Button Text="Lembrar" Command="{Binding CmdLembrar}" />
+        </StackLayout>
         <Label Grid.Row="1" Text="{Binding Sinopse}" />
     </Grid>
 

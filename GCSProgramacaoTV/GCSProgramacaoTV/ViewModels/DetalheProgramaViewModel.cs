@@ -1,10 +1,13 @@
 ﻿using GCSProgramacaoTV.Model;
+using GCSProgramacaoTV.Model.Interfaces;
 using HtmlAgilityPack;
 using Plugin.LocalNotifications;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
+using System.Globalization;
+using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
 {
@@ -13,12 +16,15 @@ namespace GCSProgramacaoTV.ViewModels
         private string _nomePrograma;
         private string _sinopse;
         private string _title;
+        private string _horario;
 
         public string NomePrograma { get => _nomePrograma; set { SetProperty(ref _nomePrograma, value); Title = value; } }
 
         public string Title { get => _title; set => SetProperty(ref _title, value); }
 
         public string Sinopse { get => _sinopse; set => SetProperty(ref _sinopse, value); }
+
+        public string Horario { get => _horario; set => SetProperty(ref _horario, value); }
 
         public DelegateCommand CmdLembrar { get; set; }
 
@@ -39,7 +45,19 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void DoLembrar()
         {
-            CrossLocalNotifications.Current.Show("Lemrar de Programação", "vai começar o programa xxx", 1, DateTime.Now.AddMinutes(2));
+            try
+            {
+                //Passar a data também
+                DateTime dateTime = DateTime.ParseExact(this.Horario, "HH:mm",
+                                            CultureInfo.InvariantCulture);
+                CrossLocalNotifications.Current.Show("Lembrar de Programação", "vai começar o programa " + this.NomePrograma,
+                    1, dateTime);
+                DependencyService.Get<IMessage>().LongAlert("Lembrete adicionado");
+            }
+            catch(Exception ex)
+            {
+                this.Sinopse = ex.Message;
+            }
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
@@ -50,7 +68,12 @@ namespace GCSProgramacaoTV.ViewModels
         public void OnNavigatedTo(NavigationParameters parameters)
         {
             if (parameters.ContainsKey("id"))
+            {
                 MostraDetalhes((string)parameters["id"]);
+
+                if (parameters.ContainsKey("horario"))
+                    this.Horario = (string)parameters["horario"];
+            }
         }
 
         public void OnNavigatingTo(NavigationParameters parameters)

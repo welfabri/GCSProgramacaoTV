@@ -145,9 +145,9 @@ namespace GCSProgramacaoTV.ViewModels
             }
         }
 
-        private void SelecionouCanal()
+        private async Task SelecionouCanal()
         {
-            DevolveListaProgramas();
+            await DevolveListaProgramas();
         }
 
         private async Task DevolveListaProgramas()
@@ -204,7 +204,11 @@ namespace GCSProgramacaoTV.ViewModels
             //Abrir tela com a sinopse
             if (ProgramaSelecionado != null)
             {
-                NavigationParameters n = new NavigationParameters("id=" + ProgramaSelecionado.Id);
+                NavigationParameters n = new NavigationParameters("id=" + ProgramaSelecionado.Id)
+                {
+                    { "nomePrograma", ProgramaSelecionado.Nome },
+                    { "horario", ProgramaSelecionado.Horario }
+                };
                 await NavigationService.NavigateAsync("NavigationPage/DetalhePrograma", n);
             }
         }
