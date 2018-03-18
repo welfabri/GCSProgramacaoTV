@@ -15,7 +15,6 @@
             <Button Text="Atualizar" Command="{Binding CmdAtualizar}" />
         </StackLayout>
 
-
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
@@ -23,22 +22,33 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="LstCanais" 
-                      ItemsSource="{Binding ListaCanais}" 
-                      SelectedItem="{Binding CanalSelecionado, Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout BackgroundColor="#fff" Orientation="Vertical" Padding="5,0,5,1">
-                                <Label Text="{Binding Nome}" HorizontalOptions="StartAndExpand" 
-                                       FontAttributes="Bold" />
-                                <Label Text="{Binding ProgramaAtual}" HorizontalOptions="StartAndExpand" 
-                                       TextColor="#503026" FontSize="Micro" VerticalOptions="StartAndExpand" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <SearchBar Grid.Row="0" Text="{Binding TextoBuscarCanais, Mode=TwoWay}" 
+                           HorizontalOptions="StartAndExpand" />
+
+                <ListView Grid.Row="1" x:Name="LstCanais" 
+                          ItemsSource="{Binding ListaCanais}" 
+                          SelectedItem="{Binding CanalSelecionado, Mode=TwoWay}"
+                          HorizontalOptions="StartAndExpand">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout BackgroundColor="#fff" Orientation="Vertical" Padding="5,0,5,1">
+                                    <Label Text="{Binding Nome}" HorizontalOptions="StartAndExpand" 
+                                           FontAttributes="Bold" />
+                                    <Label Text="{Binding ProgramaAtual}" HorizontalOptions="StartAndExpand" 
+                                           TextColor="#503026" FontSize="Micro" VerticalOptions="StartAndExpand" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
 
             <ListView Grid.Column="1" x:Name="LstProximosProgamas" 
                       ItemsSource="{Binding ListaProgramas}" 

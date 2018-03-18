@@ -4,6 +4,7 @@ using HtmlAgilityPack;
 using Prism.Commands;
 using Prism.Navigation;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,9 @@ namespace GCSProgramacaoTV.ViewModels
         private Canal _canalSelecionado;
         private string _dataAtual;
         private bool _estaCarregando = false;
+        private string _textoBuscar;
+
+        private List<Canal> _todosCanais;
 
         public String DataAtual
         {
@@ -32,6 +36,16 @@ namespace GCSProgramacaoTV.ViewModels
         public Canal CanalSelecionado { get => _canalSelecionado; set { SetProperty(ref _canalSelecionado, value); SelecionouCanal(); } }
 
         public Programa ProgramaSelecionado { get => _programaSelecionado; set { SetProperty(ref _programaSelecionado, value); SelecionouPrograma(); } }
+
+        public string TextoBuscarCanais
+        {
+            get => _textoBuscar;
+            set
+            {
+                SetProperty(ref _textoBuscar, value);
+                BuscaCanaisPeloTexto();
+            }
+        }
 
         public DelegateCommand CmdAtualizar { get; set; }
 
@@ -66,6 +80,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void IniciaListas()
         {
+            this._todosCanais = new List<Canal>();
             this.ListaCanais = new ObservableCollection<Canal>();
             this.ListaProgramas = new ObservableCollection<Programa>();
         }
@@ -109,6 +124,7 @@ namespace GCSProgramacaoTV.ViewModels
              */
 
             this.ListaCanais.Clear();
+            this._todosCanais.Clear();
             string html = Constantes.BASEURL + @"/programacao/categoria/Todos";
 
             HtmlWeb web = new HtmlWeb();
@@ -139,6 +155,7 @@ namespace GCSProgramacaoTV.ViewModels
                             };
 
                             this.ListaCanais.Add(cnl);
+                            this._todosCanais.Add(cnl);
                         }
                     }
                 }
@@ -230,6 +247,16 @@ namespace GCSProgramacaoTV.ViewModels
             {
                 this.EstaCarregando = false;
             }
+        }
+
+        private void BuscaCanaisPeloTexto()
+        {
+            this.ListaCanais.Clear();
+
+            if (string.IsNullOrWhiteSpace(this.TextoBuscarCanais))
+                this._todosCanais.ForEach(this.ListaCanais.Add);
+            else
+                this._todosCanais.Where(x => x.Nome.ToLower().Contains(this.TextoBuscarCanais.ToLower())).ToList().ForEach(this.ListaCanais.Add);
         }
 
         void AtualizaDataAtual()
