@@ -49,33 +49,30 @@ namespace GCSProgramacaoTV.ViewModels
 
         public DelegateCommand CmdAtualizar { get; set; }
 
+        /// <summary>
+        /// http://blog.stephencleary.com/2013/01/async-oop-2-constructors.html
+        /// </summary>
+        public Task Initialization { get; private set; }
+
         public MainPageViewModel(INavigationService navigationService)
             : base(navigationService)
         {
             Title = "Programação da TV";
 
-            this.EstaCarregando = true;
-
-            try
-            {
-                IniciaSistema();
-            }
-            catch (Exception ex)
-            {
-                this.DataAtual = ex.Message;
-            }
-            finally
-            {
-                this.EstaCarregando = false;
-            }
+            Initialization = IniciaSistemaAsync();
         }
 
-        private void IniciaSistema()
+        private async Task IniciaSistemaAsync()
+        {
+            await IniciaSistema();
+        }
+
+        private async Task IniciaSistema()
         {
             IniciaListas();
             IniciaCommands();
             IniciaTimer();
-            DoAtualizar();
+            await IniciaCanais();
         }
 
         private void IniciaListas()
@@ -245,7 +242,7 @@ namespace GCSProgramacaoTV.ViewModels
             }
         }
 
-        private async void SelecionouPrograma()
+        private async Task SelecionouPrograma()
         {
             //Abrir tela com a sinopse
             if (ProgramaSelecionado != null)
@@ -260,8 +257,7 @@ namespace GCSProgramacaoTV.ViewModels
         }
 
         private async void DoAtualizar()
-        {
-            
+        {            
             AtualizaDataAtual();
             await IniciaCanais();
         }
@@ -276,7 +272,7 @@ namespace GCSProgramacaoTV.ViewModels
                 this._todosCanais.Where(x => x.Nome.ToLower().Contains(this.TextoBuscarCanais.ToLower())).ToList().ForEach(this.ListaCanais.Add);
         }
 
-        void AtualizaDataAtual()
+        private void AtualizaDataAtual()
         {
             this.DataAtual = "Última Atualização: " + DateTime.Now.ToString("dd/MM/yyyy hh:mm");
         }
