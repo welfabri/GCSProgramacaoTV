@@ -1,4 +1,6 @@
-﻿namespace GCSProgramacaoTV.Model.Classes
+﻿using System;
+
+namespace GCSProgramacaoTV.Model.Classes
 {
     public class Programa
     {

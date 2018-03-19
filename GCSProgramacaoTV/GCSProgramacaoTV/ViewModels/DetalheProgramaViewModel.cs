@@ -13,11 +13,8 @@ namespace GCSProgramacaoTV.ViewModels
 {
     public class DetalheProgramaViewModel : BindableBase, INavigationAware
 	{
-        private string _nomePrograma;
-        private string _sinopse;
-        private string _title;
-        private string _horario;
-        private string _canal;
+        private string _nomePrograma, _sinopse, _title, _horario, _canal, _data;
+        private HtmlDocument _htmlRetornado;
 
         public string NomePrograma { get => _nomePrograma; set { SetProperty(ref _nomePrograma, value); Title = value; } }
 
@@ -29,6 +26,23 @@ namespace GCSProgramacaoTV.ViewModels
 
         public DateTime HorarioDateTime => DateTime.ParseExact(this.Horario, "HH:mm",
              CultureInfo.InvariantCulture);
+
+        public string Data { get => _data; set { SetProperty(ref _data, value); this.CmdLembrar.RaiseCanExecuteChanged(); } }
+
+        public DateTime DataDateTime
+        {
+            get
+            {
+                //Seg, 19/03 às 15h25
+                //MELHORAR
+                string dia = this.Data.Substring(5, 2);
+                string mes = this.Data.Substring(8, 2);
+                string hora = this.Data.Substring(14, 2);
+                string minuto = this.Data.Substring(17, 2);
+
+                return new DateTime(DateTime.Now.Year, int.Parse(mes), int.Parse(dia), int.Parse(hora), int.Parse(minuto), 0);
+            }
+        }
 
         public DelegateCommand CmdLembrar { get; set; }
 
@@ -44,17 +58,17 @@ namespace GCSProgramacaoTV.ViewModels
 
         private bool CanLembrar()
         {
-            return (this.Horario != null) && (this.HorarioDateTime > DateTime.Now);
+            return (this.Data != null) && (this.DataDateTime > DateTime.Now);
         }
 
         private void DoLembrar()
         {
             try
             {
-                //Passar a data também
                 CrossLocalNotifications.Current.Show("Lembrete de Programação", 
                     $"{this.NomePrograma} no canal { this._canal}",
-                    DateTime.Now.Minute + DateTime.Now.Second, this.HorarioDateTime);
+                    DateTime.Now.Minute + DateTime.Now.Second,
+                    this.DataDateTime);
                 DependencyService.Get<IMessage>().LongAlert("Lembrete adicionado");
             }
             catch(Exception ex)
@@ -149,17 +163,22 @@ namespace GCSProgramacaoTV.ViewModels
 
             try
             {
-                var htmlDoc = await web.LoadFromWebAsync(html);
+                _htmlRetornado = await web.LoadFromWebAsync(html);
 
-                var noTitulo = htmlDoc.DocumentNode.SelectSingleNode("//div/div/h1");
+                var noTitulo = _htmlRetornado.DocumentNode.SelectSingleNode("//div/div/h1");
                 NomePrograma = noTitulo?.InnerHtml;
 
-                var noScript = htmlDoc.DocumentNode.SelectSingleNode("//div/div/ul/li/div/p/script"); ;
+                var noScript = _htmlRetornado.DocumentNode.SelectSingleNode("//div/div/ul/li/div/p/script");
                 int? idxIni = noScript?.InnerHtml.IndexOf("\"");
                 int? idxFim = noScript?.InnerHtml.IndexOf(";");
 
                 if (idxIni != null && idxIni > 0)
                     this.Sinopse = noScript?.InnerHtml.Substring(idxIni.Value + 1, idxFim.Value - idxIni.Value - 2);
+
+                var noData = _htmlRetornado.DocumentNode.SelectSingleNode("//div/div/ul/li/a/div/h2");
+
+                if (noData != null)
+                    this.Data = noData.InnerHtml;
             }
             catch(Exception ex)
             {

@@ -183,6 +183,8 @@ namespace GCSProgramacaoTV.ViewModels
         {
             /*
              * 
+             <li class="subheader devicepadding">Domingo, 18/03</li>
+
              <li>
 				<a title="Segurança Máxima" class="devicepadding" href="/programacao/programa/475607-seguranca-maxima">
 					<div class='lileft time'>15:00</div>
@@ -208,11 +210,13 @@ namespace GCSProgramacaoTV.ViewModels
 
                 var htmlDoc = await web.LoadFromWebAsync(html);
 
-                var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
+                //var nodeData = htmlDoc.DocumentNode.SelectSingleNode("//ul/li");
 
-                if (nodes != null)
+                var nodesA = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
+
+                if (nodesA != null)
                 {
-                    foreach (HtmlNode node in nodes)
+                    foreach (HtmlNode node in nodesA)
                     {
                         if (node != null && node.Attributes["title"] != null)
                         {
