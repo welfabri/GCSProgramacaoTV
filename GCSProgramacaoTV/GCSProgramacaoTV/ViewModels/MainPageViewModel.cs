@@ -14,6 +14,7 @@ namespace GCSProgramacaoTV.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
+        #region Campos
         private Programa _programaSelecionado;
         private Canal _canalSelecionado;
         private string _dataAtual;
@@ -21,7 +22,10 @@ namespace GCSProgramacaoTV.ViewModels
         private string _textoBuscar;
 
         private List<Canal> _todosCanais;
+        private KeyValuePair<string, string> _generoSelecionado;
+        #endregion
 
+        #region Propriedades
         public String DataAtual
         {
             get => _dataAtual;
@@ -32,10 +36,13 @@ namespace GCSProgramacaoTV.ViewModels
 
         public ObservableCollection<Canal> ListaCanais { get; set; }
         public ObservableCollection<Programa> ListaProgramas { get; set; }
+        public ObservableCollection<KeyValuePair<string, string>> ListaGeneros { get; set; }
 
         public Canal CanalSelecionado { get => _canalSelecionado; set { SetProperty(ref _canalSelecionado, value); SelecionouCanal(); } }
 
         public Programa ProgramaSelecionado { get => _programaSelecionado; set { SetProperty(ref _programaSelecionado, value); SelecionouPrograma(); } }
+
+        public KeyValuePair<string, string> GeneroSelecionado { get => _generoSelecionado; set { SetProperty(ref _generoSelecionado, value); SelecionouGenero(); } }        
 
         public string TextoBuscarCanais
         {
@@ -53,6 +60,7 @@ namespace GCSProgramacaoTV.ViewModels
         /// http://blog.stephencleary.com/2013/01/async-oop-2-constructors.html
         /// </summary>
         public Task Initialization { get; private set; }
+        #endregion
 
         public MainPageViewModel(INavigationService navigationService)
             : base(navigationService)
@@ -69,17 +77,36 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async Task IniciaSistema()
         {
-            IniciaListas();
             IniciaCommands();
+            IniciaListas();            
             IniciaTimer();
-            await IniciaCanais();
+
+            this._generoSelecionado = this.ListaGeneros.FirstOrDefault();
         }
 
         private void IniciaListas()
         {
+
+            KeyValuePair<string, string> CriaChave(string chave, string valor)
+            {
+                return new KeyValuePair<string, string>(chave, valor);
+            }
+
             this._todosCanais = new List<Canal>();
             this.ListaCanais = new ObservableCollection<Canal>();
             this.ListaProgramas = new ObservableCollection<Programa>();
+            this.ListaGeneros = new ObservableCollection<KeyValuePair<String, String>>()
+            {
+                { CriaChave("Todos", "Todos") }, 
+                { CriaChave("Filmes", "Filmes") },
+                { CriaChave("Séries", "Series") },
+                { CriaChave("Esportes", "Esportes") },
+                { CriaChave("Infantil", "Infantil") },
+                { CriaChave("Variedades", "Variedades") },
+                { CriaChave("Documentários", "Documentarios") },
+                { CriaChave("Notícias", "Noticias") },
+                { CriaChave("Aberta", "Aberta") }
+            };            
         }
 
         private void IniciaCommands()
@@ -120,6 +147,9 @@ namespace GCSProgramacaoTV.ViewModels
              </li>
              */
 
+            if (String.IsNullOrEmpty(GeneroSelecionado.Value))
+                return;
+
             this.EstaCarregando = true;
 
             try
@@ -128,7 +158,7 @@ namespace GCSProgramacaoTV.ViewModels
                 this.ListaCanais.Clear();
                 this.ListaProgramas.Clear();
                 
-                string html = Constantes.BASEURL + @"/programacao/categoria/Todos";
+                string html = Constantes.BASEURL + $@"/programacao/categoria/{GeneroSelecionado.Value}";
 
                 HtmlWeb web = new HtmlWeb();
 
@@ -280,6 +310,11 @@ namespace GCSProgramacaoTV.ViewModels
         private void AtualizaDataAtual()
         {
             this.DataAtual = "Última Atualização: " + DateTime.Now.ToString("dd/MM/yyyy hh:mm");
+        }
+
+        private async Task SelecionouGenero()
+        {
+            await IniciaCanais();
         }
     }
 }
