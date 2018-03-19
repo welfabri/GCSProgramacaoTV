@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageCircle.Forms.Plugin.UWP;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace GCSProgramacaoTV.UWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            ImageCircleRenderer.Init();
         }
 
         /// <summary>

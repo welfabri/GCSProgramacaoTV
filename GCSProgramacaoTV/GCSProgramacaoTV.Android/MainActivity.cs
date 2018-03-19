@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using ImageCircle.Forms.Plugin.Droid;
 using Prism;
 using Prism.Ioc;
 
@@ -19,6 +20,7 @@ namespace GCSProgramacaoTV.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            ImageCircleRenderer.Init();
             LoadApplication(new App(new AndroidInitializer()));
         }
     }

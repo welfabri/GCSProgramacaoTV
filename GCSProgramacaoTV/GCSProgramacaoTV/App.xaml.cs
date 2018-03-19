@@ -1,10 +1,9 @@
-﻿using Prism;
+﻿using GCSProgramacaoTV.Views;
+using Prism;
 using Prism.Ioc;
-using GCSProgramacaoTV.ViewModels;
-using GCSProgramacaoTV.Views;
+using Prism.Unity;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Prism.Unity;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace GCSProgramacaoTV
@@ -24,14 +23,18 @@ namespace GCSProgramacaoTV
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("NavigationPage/MainPage");
+            //await NavigationService.NavigateAsync("NavigationPage/MainPage");
+            await NavigationService.NavigateAsync("MasterDetailMainPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<MasterDetailMainPage>();
+            containerRegistry.RegisterForNavigation<MasterPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
-            containerRegistry.RegisterForNavigation<DetalhePrograma>();
+            containerRegistry.RegisterForNavigation<DetalhePrograma>();            
+            
         }
     }
 }
