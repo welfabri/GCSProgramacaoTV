@@ -105,7 +105,8 @@ namespace GCSProgramacaoTV.ViewModels
                 { CriaChave("Variedades", "Variedades") },
                 { CriaChave("Documentários", "Documentarios") },
                 { CriaChave("Notícias", "Noticias") },
-                { CriaChave("Aberta", "Aberta") }
+                { CriaChave("Aberta", "Aberta") },
+                { CriaChave("Htv", "Todos") }
             };            
         }
 
@@ -187,8 +188,11 @@ namespace GCSProgramacaoTV.ViewModels
                                     ProgramaAtual = node.Attributes["title"]?.Value
                                 };
 
-                                this.ListaCanais.Add(cnl);
-                                this._todosCanais.Add(cnl);
+                                if ((GeneroSelecionado.Key.ToLower() != "htv") || (ProgramasCtrl.CanaisHTV().FirstOrDefault(x => cnl.Nome.ToLower().Contains(x)) != null))
+                                {
+                                    this.ListaCanais.Add(cnl);
+                                    this._todosCanais.Add(cnl);
+                                }
                             }
                         }
                     }
