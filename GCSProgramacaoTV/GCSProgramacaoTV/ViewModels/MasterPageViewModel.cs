@@ -77,16 +77,16 @@ namespace GCSProgramacaoTV.ViewModels
                 new MasterPageItem()
                 {
                     Title = "Principal",
-                    IconSource = "Resources/glyphicons_charts.png",
+                    //IconSource = "Resources/glyphicons_charts.png",
                     TargetTypeName = "ClientMainPage_Main",
-                    TargetType = typeof(DetalhePrograma)
+                    //TargetType = typeof(DetalhePrograma)
                 },
                 new MasterPageItem()
                 {
                     Title = "Configurações",
-                    IconSource = "Resources/glyphicons_cogwheel.png",
+                    //IconSource = "Resources/glyphicons_cogwheel.png",
                     TargetTypeName = "MainPage",
-                    TargetType = typeof(MainPage)
+                    //TargetType = typeof(MainPage)
                 }
             };
 

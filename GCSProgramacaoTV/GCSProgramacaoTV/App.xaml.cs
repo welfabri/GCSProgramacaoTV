@@ -23,8 +23,8 @@ namespace GCSProgramacaoTV
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("NavigationPage/MainPage");
-            //await NavigationService.NavigateAsync("MasterDetailMainPage");
+            //await NavigationService.NavigateAsync("NavigationPage/MainPage");
+            await NavigationService.NavigateAsync("MasterDetailMainPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
