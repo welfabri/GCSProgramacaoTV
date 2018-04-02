@@ -11,7 +11,7 @@ namespace GCSProgramacaoTV.Views
 	{
 		public MainPage ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
 	}
 }

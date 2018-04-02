@@ -1,24 +1,22 @@
 ﻿using GCSProgramacaoTV.Model.Classes;
 using GCSProgramacaoTV.Views;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace GCSProgramacaoTV.ViewModels
 {
-	public class MasterPageViewModel : BindableBase
+    public class MasterPageViewModel : BindableBase
 	{
-        private string _clientImage = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAvBAAAAJDFlOGU4YzNlLTdkZjItNGYwYS04ZWUwLTBlNzdkOGI0NTZlOA.jpg";
+        private string _clientImage = "http://1.bp.blogspot.com/-OlBlCoFO0w8/VVE7CYvL7sI/AAAAAAAALAs/cMUrOZiC8xc/s1600/user.png";
         public string ClientImage
         {
             get { return _clientImage; }
             set { SetProperty(ref _clientImage, value); }
         }
 
-        private string _clientName = "Emiliano Soares";
+        private string _clientName = "Não Registrado";
         public string ClientName
         {
             get { return _clientName; }
@@ -26,6 +24,8 @@ namespace GCSProgramacaoTV.ViewModels
         }
 
         private MasterPageItem _menuItemSelected;
+        private IEventAggregator _eventAggregator;
+
         public MasterPageItem MenuItemSelected
         {
             get { return _menuItemSelected; }
@@ -44,11 +44,13 @@ namespace GCSProgramacaoTV.ViewModels
         public DelegateCommand<MasterPageItem> MenuItemCmd { get; set; }
 
         public MasterPageViewModel(/*IUnityContainer unityContainer,
-            INavigationService navigationService, IEventAggregator eventAggregator*/)
+            INavigationService navigationService,*/ IEventAggregator eventAggregator)
         {
+            this._eventAggregator = eventAggregator;
+
             /*
             this._unityContainer = unityContainer;
-            this._eventAggregator = eventAggregator;
+            
             this._navigationService = navigationService;
             */
             CreateMenuItems();
@@ -62,12 +64,12 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void OnMenuItem(MasterPageItem item)
         {
-            /*
+            
             if (item != null)
             {
-                this._eventAggregator.GetEvent<DetailClickEvent>().Publish(item.TargetType);
+                //this._eventAggregator.GetEvent<DetailClickEvent>().Publish(item.TargetType);
             }
-            */
+            
         }
 
         private void CreateMenuItems()
@@ -78,19 +80,19 @@ namespace GCSProgramacaoTV.ViewModels
                 {
                     Title = "Principal",
                     //IconSource = "Resources/glyphicons_charts.png",
-                    TargetTypeName = "ClientMainPage_Main",
-                    //TargetType = typeof(DetalhePrograma)
+                    TargetTypeName = "MainPage",
+                    TargetType = typeof(MainPage)
                 },
                 new MasterPageItem()
                 {
                     Title = "Configurações",
                     //IconSource = "Resources/glyphicons_cogwheel.png",
-                    TargetTypeName = "MainPage",
-                    //TargetType = typeof(MainPage)
+                    TargetTypeName = "DetalhePrograma",
+                    TargetType = typeof(DetalhePrograma)
                 }
             };
 
-            //this.MenuItemSelected = this.MenuItems[0];
+            this.MenuItemSelected = this.MenuItems[0];
         }
     }
 }
