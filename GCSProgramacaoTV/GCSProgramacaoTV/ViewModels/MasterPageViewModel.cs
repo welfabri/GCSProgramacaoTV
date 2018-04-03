@@ -1,4 +1,5 @@
 ﻿using GCSProgramacaoTV.Model.Classes;
+using GCSProgramacaoTV.Model.Eventos;
 using GCSProgramacaoTV.Views;
 using Prism.Commands;
 using Prism.Events;
@@ -67,7 +68,7 @@ namespace GCSProgramacaoTV.ViewModels
             
             if (item != null)
             {
-                //this._eventAggregator.GetEvent<DetailClickEvent>().Publish(item.TargetType);
+                this._eventAggregator.GetEvent<DetailClickEvent>().Publish(item.TargetType);
             }
             
         }
