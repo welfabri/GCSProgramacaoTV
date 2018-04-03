@@ -10,7 +10,7 @@ namespace GCSProgramacaoTV.Views
         public MasterDetailMainPage(IEventAggregator eventAggregator)
         {
             InitializeComponent();
-            
+
             eventAggregator.GetEvent<DetailClickEvent>().Subscribe(OnClickDetail);            
         }
 
@@ -19,7 +19,7 @@ namespace GCSProgramacaoTV.Views
             if (page != null)
             {
                 Detail = new NavigationPage((Page)Activator.CreateInstance(page));
-                IsPresented = false;
+                IsPresented = false;                    
             }
         }
     }

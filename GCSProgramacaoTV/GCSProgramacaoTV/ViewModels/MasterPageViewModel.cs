@@ -3,29 +3,31 @@ using GCSProgramacaoTV.Model.Eventos;
 using GCSProgramacaoTV.Views;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
+using Prism.Navigation;
+using System;
 using System.Collections.ObjectModel;
+using Unity;
+using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
 {
-    public class MasterPageViewModel : BindableBase
+    public class MasterPageViewModel : ViewModelBase
 	{
         private string _clientImage = "http://1.bp.blogspot.com/-OlBlCoFO0w8/VVE7CYvL7sI/AAAAAAAALAs/cMUrOZiC8xc/s1600/user.png";
+        private string _clientName = "Não Registrado";
+        private MasterPageItem _menuItemSelected;
+
         public string ClientImage
         {
             get { return _clientImage; }
             set { SetProperty(ref _clientImage, value); }
-        }
+        }        
 
-        private string _clientName = "Não Registrado";
         public string ClientName
         {
             get { return _clientName; }
             set { SetProperty(ref _clientName, value); }
         }
-
-        private MasterPageItem _menuItemSelected;
-        private IEventAggregator _eventAggregator;
 
         public MasterPageItem MenuItemSelected
         {
@@ -44,16 +46,11 @@ namespace GCSProgramacaoTV.ViewModels
 
         public DelegateCommand<MasterPageItem> MenuItemCmd { get; set; }
 
-        public MasterPageViewModel(/*IUnityContainer unityContainer,
-            INavigationService navigationService,*/ IEventAggregator eventAggregator)
+        public MasterPageViewModel(INavigationService navigationService,
+            IUnityContainer unityContainer,
+            IEventAggregator eventAggregator) : base(navigationService,
+            unityContainer, eventAggregator)
         {
-            this._eventAggregator = eventAggregator;
-
-            /*
-            this._unityContainer = unityContainer;
-            
-            this._navigationService = navigationService;
-            */
             CreateMenuItems();
             CreateCommands();
         }
@@ -68,9 +65,11 @@ namespace GCSProgramacaoTV.ViewModels
             
             if (item != null)
             {
-                this._eventAggregator.GetEvent<DetailClickEvent>().Publish(item.TargetType);
-            }
-            
+                if (item.TargetType != typeof(RegistroTabbedPage))
+                    this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(item.TargetType);
+                else
+                    this.NavigationService.NavigateAsync("NavigationPage/" + item.TargetTypeName);
+            }            
         }
 
         private void CreateMenuItems()
@@ -88,8 +87,8 @@ namespace GCSProgramacaoTV.ViewModels
                 {
                     Title = "Entrar",
                     //IconSource = "Resources/glyphicons_cogwheel.png",
-                    TargetTypeName = "DetalhePrograma",
-                    TargetType = typeof(DetalhePrograma)
+                    TargetTypeName = nameof(RegistroTabbedPage),
+                    TargetType = typeof(RegistroTabbedPage)
                 },
                 new MasterPageItem()
                 {

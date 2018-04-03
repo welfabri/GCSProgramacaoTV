@@ -2,12 +2,14 @@
 using GCSProgramacaoTV.Model.Classes;
 using HtmlAgilityPack;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity;
 using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
@@ -62,8 +64,10 @@ namespace GCSProgramacaoTV.ViewModels
         public Task Initialization { get; private set; }
         #endregion
 
-        public MainPageViewModel(INavigationService navigationService)
-            : base(navigationService)
+        public MainPageViewModel(INavigationService navigationService,
+            IUnityContainer unityContainer,
+            IEventAggregator eventAggregator)
+            : base(navigationService, unityContainer, eventAggregator)
         {
             Title = "Programação da TV";
 
@@ -188,7 +192,7 @@ namespace GCSProgramacaoTV.ViewModels
                                     ProgramaAtual = node.Attributes["title"]?.Value
                                 };
 
-                                if ((GeneroSelecionado.Key.ToLower() != "htv") || (ProgramasCtrl.CanaisHTV().FirstOrDefault(x => cnl.Nome.ToLower().Contains(x)) != null))
+                                if ((GeneroSelecionado.Key.ToLower() != "htv") || Htv.ECanalHtv(cnl.Nome))
                                 {
                                     this.ListaCanais.Add(cnl);
                                     this._todosCanais.Add(cnl);

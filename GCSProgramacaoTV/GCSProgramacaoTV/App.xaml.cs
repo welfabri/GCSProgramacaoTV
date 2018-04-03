@@ -25,6 +25,7 @@ namespace GCSProgramacaoTV
 
             //await NavigationService.NavigateAsync("NavigationPage/MainPage");
             await NavigationService.NavigateAsync("MasterDetailMainPage");
+            //await NavigationService.NavigateAsync("RegistroTabbedPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -33,8 +34,10 @@ namespace GCSProgramacaoTV
             containerRegistry.RegisterForNavigation<MasterDetailMainPage>();
             containerRegistry.RegisterForNavigation<MasterPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
-            containerRegistry.RegisterForNavigation<DetalhePrograma>();            
-            
+            containerRegistry.RegisterForNavigation<DetalhePrograma>();
+            containerRegistry.RegisterForNavigation<RegistroTabbedPage>();
+            containerRegistry.RegisterForNavigation<LoginPage>();
+            containerRegistry.RegisterForNavigation<RegistroPage>();
         }
     }
 }
