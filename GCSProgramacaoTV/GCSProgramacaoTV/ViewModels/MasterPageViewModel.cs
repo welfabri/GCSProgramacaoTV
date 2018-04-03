@@ -86,6 +86,27 @@ namespace GCSProgramacaoTV.ViewModels
                 },
                 new MasterPageItem()
                 {
+                    Title = "Entrar",
+                    //IconSource = "Resources/glyphicons_cogwheel.png",
+                    TargetTypeName = "DetalhePrograma",
+                    TargetType = typeof(DetalhePrograma)
+                },
+                new MasterPageItem()
+                {
+                    Title = "Meus Lembretes",
+                    //IconSource = "Resources/glyphicons_cogwheel.png",
+                    TargetTypeName = "DetalhePrograma",
+                    TargetType = typeof(DetalhePrograma)
+                },
+                new MasterPageItem()
+                {
+                    Title = "Minhas Informações",
+                    //IconSource = "Resources/glyphicons_cogwheel.png",
+                    TargetTypeName = "DetalhePrograma",
+                    TargetType = typeof(DetalhePrograma)
+                },
+                new MasterPageItem()
+                {
                     Title = "Configurações",
                     //IconSource = "Resources/glyphicons_cogwheel.png",
                     TargetTypeName = "DetalhePrograma",
