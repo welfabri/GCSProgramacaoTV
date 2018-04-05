@@ -1,4 +1,5 @@
-﻿using GCSProgramacaoTV.Model.Classes;
+﻿using GCSEntities.Classes;
+using GCSProgramacaoTV.Model.Classes;
 using GCSProgramacaoTV.Model.Eventos;
 using GCSProgramacaoTV.Views;
 using Prism.Commands;
@@ -51,7 +52,17 @@ namespace GCSProgramacaoTV.ViewModels
             IEventAggregator eventAggregator) : base(navigationService,
             unityContainer, eventAggregator)
         {
+            IniciaUsuario();
             CreateMenuItems();            
+        }
+
+        private void IniciaUsuario()
+        {            
+            if (this.UnityContainer.IsRegistered<Usuario>())
+            {
+                var u = this.UnityContainer.Resolve<Usuario>();
+                this.ClientName = u.Nome;
+            }
         }
 
         protected override void IniciaCommands()

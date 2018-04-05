@@ -1,4 +1,5 @@
-﻿using GCSEntities.Services;
+﻿using GCSEntities.Classes;
+using GCSEntities.Services;
 using GCSProgramacaoTV.Model.Interfaces;
 using Prism.Commands;
 using Prism.Events;
@@ -49,7 +50,19 @@ namespace GCSProgramacaoTV.ViewModels
         private void DoEntrar()
         {
             if (LoginService.Login(this.Email, this.Senha))
+            {
+                Usuario u = new Usuario()
+                {
+                    Ativo = true,
+                    Email = this.Email,
+                    Senha = this.Senha,
+                    Nome = "Teste 1"
+                };
+
+                this.UnityContainer.RegisterInstance<Usuario>(u);
+
                 this.NavigationService.NavigateAsync("MasterDetailMainPage");
+            }
             else
                 this.MensagemErro = "Não foi possível entrar no sistema, usuário e/ou senha inválido(s)";
         }
