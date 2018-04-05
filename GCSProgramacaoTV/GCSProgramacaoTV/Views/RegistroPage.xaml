@@ -13,17 +13,19 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Label Text="Entre com os dados abaixo para se registrar e obter funcionalidades exclusivas." />
 
-            <Entry Grid.Row="1" Keyboard="Email" Placeholder="Entre com seu e-mail" />
-            <Entry Grid.Row="2" IsPassword="True" Placeholder="Entre com sua senha" />
-            <Entry Grid.Row="3" IsPassword="True" Placeholder="Repita sua senha" />
-            <Entry Grid.Row="4" Placeholder="Entre com seu nome que deseja ser conhecido" />
+            <Entry Grid.Row="1" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email" Placeholder="Entre com seu e-mail" />
+            <Entry Grid.Row="2" Text="{Binding Senha, Mode=TwoWay}" IsPassword="True" Placeholder="Entre com sua senha" />
+            <Entry Grid.Row="3" Text="{Binding RepetirSenha, Mode=TwoWay}" IsPassword="True" Placeholder="Repita sua senha" />
+            <Entry Grid.Row="4" Text="{Binding Nome, Mode=TwoWay}" Placeholder="Entre com seu nome que deseja ser conhecido" />
 
-            <Button Grid.Row="3" Text="Entrar" />
+            <Button Grid.Row="5" Text="Registrar" Command="{Binding RegistrarCmd}" />
         </Grid>
     </ContentPage.Content>
 
