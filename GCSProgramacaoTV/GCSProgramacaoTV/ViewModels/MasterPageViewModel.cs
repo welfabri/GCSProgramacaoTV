@@ -51,11 +51,10 @@ namespace GCSProgramacaoTV.ViewModels
             IEventAggregator eventAggregator) : base(navigationService,
             unityContainer, eventAggregator)
         {
-            CreateMenuItems();
-            CreateCommands();
+            CreateMenuItems();            
         }
 
-        private void CreateCommands()
+        protected override void IniciaCommands()
         {
             this.MenuItemCmd = new DelegateCommand<MasterPageItem>(OnMenuItem);
         }

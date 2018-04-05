@@ -81,7 +81,6 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async Task IniciaSistema()
         {
-            IniciaCommands();
             IniciaListas();            
             IniciaTimer();
 
@@ -114,7 +113,7 @@ namespace GCSProgramacaoTV.ViewModels
             };            
         }
 
-        private void IniciaCommands()
+        protected override void IniciaCommands()
         {
             this.CmdAtualizar = new DelegateCommand(DoAtualizar);
         }

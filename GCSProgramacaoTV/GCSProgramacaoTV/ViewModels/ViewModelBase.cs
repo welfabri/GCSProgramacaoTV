@@ -1,15 +1,11 @@
-﻿using Prism.Commands;
-using Prism.Events;
+﻿using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity;
 
 namespace GCSProgramacaoTV.ViewModels
 {
-    public class ViewModelBase : BindableBase, INavigationAware, IDestructible
+    public abstract class ViewModelBase : BindableBase, INavigationAware, IDestructible
     {
         protected INavigationService NavigationService { get; private set; }
         protected IEventAggregator EventAggregatorProperty { get; private set; }
@@ -29,7 +25,11 @@ namespace GCSProgramacaoTV.ViewModels
             NavigationService = navigationService;
             EventAggregatorProperty = eventAggregator;
             UnityContainer = unityContainer;
+
+            this.IniciaCommands();
         }
+
+        protected abstract void IniciaCommands();
 
         //protected abstract void IniciaVM();
 

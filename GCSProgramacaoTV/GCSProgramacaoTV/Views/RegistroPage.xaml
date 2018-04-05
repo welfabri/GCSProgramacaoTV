@@ -9,14 +9,21 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Text="E-mail" />
+            <Label Text="Entre com os dados abaixo para se registrar e obter funcionalidades exclusivas." />
+
+            <Entry Grid.Row="1" Keyboard="Email" Placeholder="Entre com seu e-mail" />
+            <Entry Grid.Row="2" IsPassword="True" Placeholder="Entre com sua senha" />
+            <Entry Grid.Row="3" IsPassword="True" Placeholder="Repita sua senha" />
+            <Entry Grid.Row="4" Placeholder="Entre com seu nome que deseja ser conhecido" />
+
+            <Button Grid.Row="3" Text="Entrar" />
         </Grid>
     </ContentPage.Content>
 
