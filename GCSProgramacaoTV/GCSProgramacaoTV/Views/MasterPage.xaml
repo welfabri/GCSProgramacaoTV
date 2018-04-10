@@ -46,7 +46,7 @@
 
         <ListView x:Name="listView" SeparatorVisibility="None" 
                   ItemsSource="{Binding MenuItems}" 
-                  SelectedItem="{Binding MenuItemSelected}">
+                  SelectedItem="{Binding MenuItemSelected, Mode=TwoWay}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

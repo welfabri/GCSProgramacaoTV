@@ -1,4 +1,5 @@
-﻿using GCSEntities.Services;
+﻿using GCSEntities.Classes;
+using GCSEntities.Services;
 using GCSProgramacaoTV.Model.Interfaces;
 using Prism.Commands;
 using Prism.Events;
@@ -59,7 +60,9 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void DoRegistrar()
         {
-            if (LoginService.Registrar(this.Email, this.Senha, this.Nome))
+            Usuario u = LoginService.Registrar(this.Email, this.Senha, this.Nome);
+
+            if (u != null)
                 this.NavigationService.NavigateAsync("MasterDetailMainPage");
             else
                 this.MensagemErro = "Não foi possível registrar no sistema";

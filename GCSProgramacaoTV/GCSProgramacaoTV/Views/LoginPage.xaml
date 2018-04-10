@@ -24,7 +24,7 @@
 
             <Button Grid.Row="3" Text="Entrar" Command="{Binding EntrarCmd}" />
 
-            <Label Grid.Row="4" Text="Esqeuci a Senha..." HorizontalOptions="Start" Margin="10">
+            <Label Grid.Row="4" Text="Esqueci a Senha..." HorizontalOptions="Start" Margin="10">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding EsqueciASenhaCmd}" />
                 </Label.GestureRecognizers>

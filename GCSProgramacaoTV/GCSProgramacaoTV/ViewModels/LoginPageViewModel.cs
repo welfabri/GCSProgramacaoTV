@@ -49,18 +49,11 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void DoEntrar()
         {
-            if (LoginService.Login(this.Email, this.Senha))
-            {
-                Usuario u = new Usuario()
-                {
-                    Ativo = true,
-                    Email = this.Email,
-                    Senha = this.Senha,
-                    Nome = "Teste 1"
-                };
+            Usuario u = LoginService.Login(this.Email, this.Senha);
 
+            if (u != null)
+            {                
                 this.UnityContainer.RegisterInstance<Usuario>(u);
-
                 this.NavigationService.NavigateAsync("MasterDetailMainPage");
             }
             else

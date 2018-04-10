@@ -294,7 +294,7 @@ namespace GCSProgramacaoTV.ViewModels
                     { "horario", ProgramaSelecionado.Horario },
                     { "canal", CanalSelecionado.Nome }
                 };
-                await NavigationService.NavigateAsync("NavigationPage/DetalhePrograma", n);
+                await NavigationService.NavigateAsync("DetalhePrograma", n);
             }
         }
 
