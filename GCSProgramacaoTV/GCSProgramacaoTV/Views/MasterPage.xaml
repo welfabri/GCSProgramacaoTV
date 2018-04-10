@@ -49,7 +49,7 @@
                   SelectedItem="{Binding MenuItemSelected, Mode=TwoWay}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
+                    <ViewCell IsEnabled="{Binding Visivel}">
                         <Grid Padding="5,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30"/>

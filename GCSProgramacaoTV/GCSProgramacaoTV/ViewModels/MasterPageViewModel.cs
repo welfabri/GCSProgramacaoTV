@@ -15,6 +15,7 @@ namespace GCSProgramacaoTV.ViewModels
         private string _clientImage;
         private string _clientName;
         private MasterPageItem _menuItemSelected;
+        private bool _estaLogado;
 
         public string ClientImage
         {
@@ -45,6 +46,10 @@ namespace GCSProgramacaoTV.ViewModels
 
         public DelegateCommand<MasterPageItem> MenuItemCmd { get; set; }
 
+        public bool EstaLogado { get { return _estaLogado; } set { SetProperty(ref _estaLogado, value); } }
+
+
+
         public MasterPageViewModel(INavigationService navigationService,
             IUnityContainer unityContainer,
             IEventAggregator eventAggregator) : base(navigationService,
@@ -61,7 +66,15 @@ namespace GCSProgramacaoTV.ViewModels
                 var u = this.UnityContainer.Resolve<Usuario>();
                 this.ClientName = u.Nome;
                 this.ClientImage = "https://thumbs.dreamstime.com/z/vector-o-%C3%ADcone-do-avatar-do-usu%C3%A1rio-para-site-ou-o-m%C3%B3bil-45836554.jpg";
-//                this.MenuItemSelected = this.MenuItems[0];
+                //                this.MenuItemSelected = this.MenuItems[0];
+
+                short i = 0;
+
+                foreach(var m in this.MenuItems)
+                {
+                    m.Visivel = i != 1;
+                    i++;
+                }
             } else
             {
                 this.ClientName = "Não Registrado";
@@ -81,9 +94,9 @@ namespace GCSProgramacaoTV.ViewModels
             {
                 
                 //if (item.TargetType != typeof(RegistroTabbedPage))
-                    this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(item.TargetType);
+                //    this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(item.TargetType);
                 //else*/
-                //    this.NavigationService.NavigateAsync("NavigationPage/" + item.TargetTypeName);
+                    this.NavigationService.NavigateAsync("NavigationPage/" + item.TargetTypeName);
             }            
         }
 
@@ -93,45 +106,15 @@ namespace GCSProgramacaoTV.ViewModels
             {
                 this.MenuItems = new ObservableCollection<MasterPageItem>()
                 {
-                    new MasterPageItem()
-                    {
-                        Title = "Principal",
-                        //IconSource = "Resources/glyphicons_charts.png",
-                        TargetTypeName = "MainPage",
-                        TargetType = typeof(MainPage)
-                    },
-                    new MasterPageItem()
-                    {
-                        Title = "Entrar",
-                        //IconSource = "Resources/glyphicons_cogwheel.png",
-                        TargetTypeName = nameof(RegistroTabbedPage),
-                        TargetType = typeof(RegistroTabbedPage)
-                    },
-                    new MasterPageItem()
-                    {
-                        Title = "Meus Lembretes",
-                        //IconSource = "Resources/glyphicons_cogwheel.png",
-                        TargetTypeName = "DetalhePrograma",
-                        TargetType = typeof(DetalhePrograma)
-                    },
-                    new MasterPageItem()
-                    {
-                        Title = "Minhas Informações",
-                        //IconSource = "Resources/glyphicons_cogwheel.png",
-                        TargetTypeName = "DetalhePrograma",
-                        TargetType = typeof(DetalhePrograma)
-                    },
-                    new MasterPageItem()
-                    {
-                        Title = "Configurações",
-                        //IconSource = "Resources/glyphicons_cogwheel.png",
-                        TargetTypeName = "DetalhePrograma",
-                        TargetType = typeof(DetalhePrograma)
-                    }
+                    new MasterPageItem().Preencher("Principal", "Resources/glyphicons_charts.png", nameof(MainPage), typeof(MainPage), true),
+                    new MasterPageItem().Preencher("Entrar", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(RegistroTabbedPage), true),
+                    new MasterPageItem().Preencher("Meus Lembretes", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false),
+                    new MasterPageItem().Preencher("Minhas Informações", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false),                    
+                    new MasterPageItem().Preencher("Configurações", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false)                        
                 };                
             }
 
-            this.MenuItemSelected = this.MenuItems[0];
+            //this.MenuItemSelected = this.MenuItems[0];
         }
     }
 }

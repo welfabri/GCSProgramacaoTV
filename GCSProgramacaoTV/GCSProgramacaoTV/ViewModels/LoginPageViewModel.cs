@@ -37,7 +37,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         protected override void IniciaCommands()
         {
-            this.EntrarCmd = new DelegateCommand(DoEntrar, CanEntrar)
+            this.EntrarCmd = new DelegateCommand(async () => await DoEntrar(), CanEntrar)
                 .ObservesProperty(() => this.Email)
                 .ObservesProperty(() => this.Senha);
             this.EsqueciASenhaCmd = new DelegateCommand(() => Device.OpenUri(new Uri($"http://gcs.info/gcsprogramacaotv/esqueciasenha?usuario={this.Email}")));
@@ -48,21 +48,15 @@ namespace GCSProgramacaoTV.ViewModels
             return !String.IsNullOrWhiteSpace(this.Email) && !String.IsNullOrWhiteSpace(this.Senha);
         }
 
-        private void DoEntrar()
+        private async Task DoEntrar()
         {
-            if (LoginService.Login(this.Email, this.Senha).Result)
+            Usuario u = await LoginService.Login(this.Email, this.Senha);            
+
+            if (u != null)
             {
-                Usuario u = new Usuario()
-                {
-                    Ativo = true,
-                    Email = this.Email,
-                    Senha = this.Senha,
-                    Nome = "Teste 1"
-                };
-
                 this.UnityContainer.RegisterInstance<Usuario>(u);
-
-                this.NavigationService.NavigateAsync("MasterDetailMainPage");
+                //await this.NavigationService.NavigateAsync("MasterDetailMainPage");
+                await this.NavigationService.GoBackAsync();
             }
             else
                 this.MensagemErro = "Não foi possível entrar no sistema, usuário e/ou senha inválido(s)";
