@@ -1,76 +1,43 @@
 ﻿using GCSEntities.Classes;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GCSEntities.Services
 {
     public static class LoginService
     {
-        public static Usuario Login(string usuario, string senha)
+        public static async Task<bool> Login(string usuario, string senha)
         {
-            if (!PreValidaUsuario(usuario, senha))
-                return null;
+            WebClient wc = new WebClient();
+            Uri uri = new Uri($"http://queijonerd.pe.hu/gcs/gcsprogramacaotv/index2.php?e={usuario}&p={senha}");
 
-            if (usuario.Equals("admin", StringComparison.OrdinalIgnoreCase) && senha.Equals("admin", StringComparison.OrdinalIgnoreCase))
-            {
-                return CriaUsuarioAdministrador();
-            }
-            else
-            {
-                return RealizaLoginInterno(usuario, senha);
-            }
+            NameValueCollection nvc = new NameValueCollection();
+            nvc.Add("e", usuario);
+            nvc.Add("p", senha);
+
+            var myHttpClient = new HttpClient();
+            var response = await myHttpClient.GetStringAsync(uri);
+
+            String jsonString = response.ToString();
+            JsonConvert.DeserializeObject<Usuario>(jsonString);
+
+            return usuario.Equals("admin", StringComparison.OrdinalIgnoreCase) && senha.Equals("admin", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static Usuario RealizaLoginInterno(string usuario, string senha)
+        private static void LoginCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
-            return new Usuario()
-            {
-                Ativo = true,
-                Email = "usuario",
-                Id = 1,
-                Nome = "Pegar do banco",
-                Senha = String.Empty
-            };
+            
         }
 
-        private static bool PreValidaUsuario(string usuario, string senha)
+        public static bool Registrar(string email, string senha, string nome)
         {
-            return !String.IsNullOrWhiteSpace(usuario) && !String.IsNullOrWhiteSpace(senha);
-        }
-
-        private static Usuario CriaUsuarioAdministrador()
-        {
-            return new Usuario()
-            {
-                Ativo = true,
-                Email = "admin",
-                Id = -1,
-                Nome = "Administrador",
-                Senha = String.Empty
-            };
-        }
-
-        public static Usuario Registrar(string email, string senha, string nome)
-        {
-            //Valida se pode registar o usuário
-            if (!PodeRegistrarUsuario())
-                return null;
-
-            //
-            Usuario result = new Usuario()
-            {
-                Nome = nome,
-                Senha = senha,
-                Ativo = true,
-                Email = email,
-                Id = 1
-            };
-
-            return result;
-        }
-
-        private static bool PodeRegistrarUsuario()
-        {
-            return false;
+            return true;
         }
     }
 }

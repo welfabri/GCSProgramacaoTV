@@ -5,6 +5,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
 using System;
+using System.Threading.Tasks;
 using Unity;
 using Xamarin.Forms;
 
@@ -49,11 +50,18 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void DoEntrar()
         {
-            Usuario u = LoginService.Login(this.Email, this.Senha);
+            if (LoginService.Login(this.Email, this.Senha).Result)
+            {
+                Usuario u = new Usuario()
+                {
+                    Ativo = true,
+                    Email = this.Email,
+                    Senha = this.Senha,
+                    Nome = "Teste 1"
+                };
 
-            if (u != null)
-            {                
                 this.UnityContainer.RegisterInstance<Usuario>(u);
+
                 this.NavigationService.NavigateAsync("MasterDetailMainPage");
             }
             else
