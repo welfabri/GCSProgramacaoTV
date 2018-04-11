@@ -55,8 +55,7 @@ namespace GCSProgramacaoTV.ViewModels
             if (u != null)
             {
                 this.UnityContainer.RegisterInstance<Usuario>(u);
-                //await this.NavigationService.NavigateAsync("MasterDetailMainPage");
-                await this.NavigationService.GoBackAsync();
+                await this.NavigationService.NavigateAsync("MasterDetailMainPage");
             }
             else
                 this.MensagemErro = "Não foi possível entrar no sistema, usuário e/ou senha inválido(s)";

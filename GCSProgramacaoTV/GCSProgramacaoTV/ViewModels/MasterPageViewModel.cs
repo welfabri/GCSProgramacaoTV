@@ -70,10 +70,11 @@ namespace GCSProgramacaoTV.ViewModels
 
                 short i = 0;
 
-                foreach(var m in this.MenuItems)
-                {
-                    m.Visivel = i != 1;
-                    i++;
+                if (this.MenuItems != null)
+                    foreach(var m in this.MenuItems)
+                    {
+                        m.Visivel = i != 1;
+                        i++;
                 }
             } else
             {

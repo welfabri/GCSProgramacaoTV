@@ -1,16 +1,21 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Prism.Events;
+using Prism.Navigation;
+using Unity;
 
 namespace GCSProgramacaoTV.ViewModels
 {
-	public class RegistroTabbedPageViewModel : BindableBase
+    public class RegistroTabbedPageViewModel : ViewModelBase
 	{
-        public RegistroTabbedPageViewModel()
+        public RegistroTabbedPageViewModel(INavigationService navigationService,
+            IUnityContainer unityContainer,
+            IEventAggregator eventAggregator) : base(navigationService, unityContainer, eventAggregator)
         {
 
         }
-	}
+
+        protected override void IniciaCommands()
+        {
+            
+        }
+    }
 }
