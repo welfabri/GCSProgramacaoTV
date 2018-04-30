@@ -32,6 +32,8 @@ namespace GCSProgramacaoTV.ViewModels
         public ObservableCollection<CanalFavorito> ListaCanais { get; set; }
         public CanalFavorito CanalSelecionado { get { return _canalSelecionado; } set { SetProperty(ref _canalSelecionado, value); SelecionouCanal(); } }
 
+        private Task Inicializacao { get; }
+
         private void SelecionouCanal()
         {
             this.CanalSelecionado.Checado = !this.CanalSelecionado.Checado;
@@ -41,14 +43,20 @@ namespace GCSProgramacaoTV.ViewModels
             IUnityContainer unityContainer,
             IEventAggregator eventAggregator) : base(navigationService, unityContainer, eventAggregator)
         {
-            IniciaObjetos();
+            //Gambi pra funcionar o async
+            this.Inicializacao = IniciaTela();
         }
 
-        private async Task IniciaObjetos()
+        private async Task IniciaTela()
         {
-            this.ListaCanais = new ObservableCollection<CanalFavorito>();
-
+            IniciaObjetos();
             await CarregaCanais();
+            await PegaFavoritos();
+        }
+
+        private void IniciaObjetos()
+        {
+            this.ListaCanais = new ObservableCollection<CanalFavorito>();            
         }
 
         private async Task CarregaCanais()
@@ -84,6 +92,25 @@ namespace GCSProgramacaoTV.ViewModels
 
                             this.ListaCanais.Add(cnl);
                         }
+                    }
+                }
+            }
+        }
+
+        private async Task PegaFavoritos()
+        {
+            string lf = await FavoritosService.ListaFavoritos(1);
+
+            if (!String.IsNullOrWhiteSpace(lf))
+            {
+                string[] af = lf.Split(',');
+
+                foreach(string s in af)
+                {
+                    if (int.TryParse(s, out int idx))
+                    {
+                        CanalFavorito cf = this.ListaCanais[idx];
+                        cf.Checado = true;
                     }
                 }
             }

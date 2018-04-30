@@ -42,5 +42,38 @@ namespace GCSEntities.Services
                 }
             }
         }
+
+        public static async Task<string> ListaFavoritos(int idUsuario)
+        {
+            WebClient wc = new WebClient();
+            Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/favoritossite.php");
+
+            Dictionary<string, string> nvc = new Dictionary<string, string>();
+            nvc.Add("idusuario", idUsuario.ToString());            
+            nvc.Add("acao", "c");
+            var content = new FormUrlEncodedContent(nvc);
+
+            using (var myHttpClient = new HttpClient())
+            {
+                try
+                {
+                    using (var response = await myHttpClient.PostAsync(uri, content).ConfigureAwait(false))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            String jsonString = await response.Content.ReadAsStringAsync();
+
+                            return jsonString;
+                        }
+                        else
+                            return "Erro ao tentar acessar o servidor";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
     }
 }
