@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="GCSProgramacaoTV.Views.MinhasInformacoesPage"
+             Title="Minhas Informações">
+
+    <StackLayout>
+        
+        <Label Text="Minhas Informações" />
+    
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Nome: " />
+            <Label Text="{Binding Nome}" />
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="E-mail: " />
+            <Label Text="{Binding Email}" />
+        </StackLayout>
+        
+    </StackLayout>
+
+</ContentPage>

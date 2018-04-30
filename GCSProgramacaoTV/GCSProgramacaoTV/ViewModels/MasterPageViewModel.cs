@@ -5,6 +5,7 @@ using GCSProgramacaoTV.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
+using System;
 using System.Collections.ObjectModel;
 using Unity;
 
@@ -16,6 +17,7 @@ namespace GCSProgramacaoTV.ViewModels
         private string _clientName;
         private MasterPageItem _menuItemSelected;
         private bool _estaLogado;
+        private readonly SubscriptionToken _tokenOnLoginOk;
 
         public string ClientImage
         {
@@ -55,14 +57,30 @@ namespace GCSProgramacaoTV.ViewModels
             IEventAggregator eventAggregator) : base(navigationService,
             unityContainer, eventAggregator)
         {
+            //Registra para pegar que o login está correto
+            this._tokenOnLoginOk = eventAggregator.GetEvent<DetailClickEvent>().Subscribe(OnLoginOk);
+
             IniciaUsuario();
             CreateMenuItems();            
+        }
+
+        /// <summary>
+        /// Recebe o evento e inicia
+        /// </summary>
+        /// <param name="page">não é usado</param>
+        private void OnLoginOk(Type page)
+        {
+            IniciaUsuario();
         }
 
         private void IniciaUsuario()
         {            
             if (this.UnityContainer.IsRegistered<Usuario>())
             {
+                //Retira o evento para colocar o nome do usuário
+                this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Unsubscribe(this._tokenOnLoginOk);
+
+                //Pega a instância do usuário registrada
                 var u = this.UnityContainer.Resolve<Usuario>();
                 this.ClientName = u.Nome;
                 this.ClientImage = "https://thumbs.dreamstime.com/z/vector-o-%C3%ADcone-do-avatar-do-usu%C3%A1rio-para-site-ou-o-m%C3%B3bil-45836554.jpg";
@@ -75,7 +93,7 @@ namespace GCSProgramacaoTV.ViewModels
                     {
                         m.Visivel = i != 1;
                         i++;
-                }
+                    }
             } else
             {
                 this.ClientName = "Não Registrado";
@@ -95,9 +113,9 @@ namespace GCSProgramacaoTV.ViewModels
             {
                 
                 //if (item.TargetType != typeof(RegistroTabbedPage))
-                //    this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(item.TargetType);
+                    this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(item.TargetType);
                 //else*/
-                    this.NavigationService.NavigateAsync("NavigationPage/" + item.TargetTypeName);
+                //    this.NavigationService.NavigateAsync("NavigationPage/" + item.TargetTypeName);
             }            
         }
 
@@ -109,8 +127,9 @@ namespace GCSProgramacaoTV.ViewModels
                 {
                     new MasterPageItem().Preencher("Principal", "Resources/glyphicons_charts.png", nameof(MainPage), typeof(MainPage), true),
                     new MasterPageItem().Preencher("Entrar", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(RegistroTabbedPage), true),
-                    new MasterPageItem().Preencher("Meus Lembretes", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false),
-                    new MasterPageItem().Preencher("Minhas Informações", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false),                    
+                    new MasterPageItem().Preencher("Meus Lembretes", "Resources/glyphicons_charts.png", nameof(MeusLembretesPage), typeof(MeusLembretesPage), false),
+                    new MasterPageItem().Preencher("Minhas Informações", "Resources/glyphicons_charts.png", nameof(MinhasInformacoesPage), typeof(MinhasInformacoesPage), false),
+                    new MasterPageItem().Preencher("Meus Favoritos", "Resources/glyphicons_charts.png", nameof(FavoritosPage), typeof(FavoritosPage), true),
                     new MasterPageItem().Preencher("Configurações", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false)                        
                 };                
             }

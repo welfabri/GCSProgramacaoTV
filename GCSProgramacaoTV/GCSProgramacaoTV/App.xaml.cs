@@ -38,6 +38,9 @@ namespace GCSProgramacaoTV
             containerRegistry.RegisterForNavigation<RegistroTabbedPage>();
             containerRegistry.RegisterForNavigation<LoginPage>();
             containerRegistry.RegisterForNavigation<RegistroPage>();
+            containerRegistry.RegisterForNavigation<MeusLembretesPage>();
+            containerRegistry.RegisterForNavigation<MinhasInformacoesPage>();
+            containerRegistry.RegisterForNavigation<FavoritosPage>();
         }
     }
 }

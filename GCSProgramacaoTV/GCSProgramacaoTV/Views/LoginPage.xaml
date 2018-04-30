@@ -5,6 +5,7 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="GCSProgramacaoTV.Views.LoginPage"
              Title="Login">
+    
     <ContentPage.Content>
 
         <Grid>

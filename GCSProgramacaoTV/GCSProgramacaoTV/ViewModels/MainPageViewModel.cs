@@ -260,7 +260,7 @@ namespace GCSProgramacaoTV.ViewModels
                             Programa prg = new Programa()
                             {
                                 Id = node.Attributes["href"].Value,
-                                Nome = node.Attributes["title"].Value
+                                Nome = node.Attributes["title"].Value.Replace("&amp;", "&")
                             };
 
                             //var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "time").FirstOrDefault();

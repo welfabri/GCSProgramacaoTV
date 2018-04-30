@@ -1,6 +1,8 @@
 ﻿using GCSEntities.Classes;
 using GCSEntities.Services;
+using GCSProgramacaoTV.Model.Eventos;
 using GCSProgramacaoTV.Model.Interfaces;
+using GCSProgramacaoTV.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
@@ -40,7 +42,7 @@ namespace GCSProgramacaoTV.ViewModels
             this.EntrarCmd = new DelegateCommand(async () => await DoEntrar(), CanEntrar)
                 .ObservesProperty(() => this.Email)
                 .ObservesProperty(() => this.Senha);
-            this.EsqueciASenhaCmd = new DelegateCommand(() => Device.OpenUri(new Uri($"http://gcs.info/gcsprogramacaotv/esqueciasenha?usuario={this.Email}")));
+            this.EsqueciASenhaCmd = new DelegateCommand(() => Device.OpenUri(new Uri($"{GCSConstantes.HOSTPRINCIPAL}/eas.php?e={this.Email}")));
         }
 
         private bool CanEntrar()
@@ -55,7 +57,7 @@ namespace GCSProgramacaoTV.ViewModels
             if (u != null)
             {
                 this.UnityContainer.RegisterInstance<Usuario>(u);
-                await this.NavigationService.NavigateAsync("MasterDetailMainPage");
+                this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(typeof(MainPage));
             }
             else
                 this.MensagemErro = "Não foi possível entrar no sistema, usuário e/ou senha inválido(s)";

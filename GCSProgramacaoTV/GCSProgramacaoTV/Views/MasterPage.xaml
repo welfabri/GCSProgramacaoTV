@@ -19,7 +19,7 @@
             </Grid.RowDefinitions>
 
             <controls:CircleImage Source="{Binding ClientImage}" 
-                                  Aspect="AspectFill"
+                                  Aspect="Fill"
                                   HorizontalOptions="Center"
                                   VerticalOptions="Center"
                                   Margin="10">
