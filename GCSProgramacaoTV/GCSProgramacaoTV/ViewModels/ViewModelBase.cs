@@ -1,8 +1,10 @@
 ﻿using GCSEntities.Classes;
+using GCSProgramacaoTV.Model.Interfaces;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Unity;
+using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
 {
@@ -63,6 +65,11 @@ namespace GCSProgramacaoTV.ViewModels
         {
             var u = this.UnityContainer.Resolve<Usuario>();
             return u != null ? u.Id : -1;
+        }
+
+        protected void MostraMensagemToast(string mensagem)
+        {
+            DependencyService.Get<IMessage>().LongAlert(mensagem);
         }
     }
 }

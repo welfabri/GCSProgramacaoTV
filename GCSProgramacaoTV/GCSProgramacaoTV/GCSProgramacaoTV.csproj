@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.Notifications" Version="4.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.7.1" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="2.0.2" />
     <PackageReference Include="Xam.Plugins.Notifier" Version="3.0.0-beta14" />

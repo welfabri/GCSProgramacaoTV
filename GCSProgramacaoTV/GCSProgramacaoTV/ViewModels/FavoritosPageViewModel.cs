@@ -1,37 +1,31 @@
 ﻿using GCSEntities.Services;
 using GCSProgramacaoTV.Model;
 using GCSProgramacaoTV.Model.Classes;
-using GCSProgramacaoTV.Model.Interfaces;
 using HtmlAgilityPack;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity;
-using Xamarin.Forms;
-using System.Linq;
-using GCSEntities.Classes;
 
 namespace GCSProgramacaoTV.ViewModels
 {
     public class FavoritosPageViewModel : ViewModelBase
 	{
         private CanalFavorito _canalSelecionado;
+        private bool _estaCarregando;
 
-        private string MensagemErro
-        {
-            set
-            {
-                DependencyService.Get<IMessage>().LongAlert(value);
-            }
-        }
+        private string MensagemErro { set { this.MostraMensagemToast(value); } }
 
         public DelegateCommand GravarCmd { get; set; }
 
         public ObservableCollection<CanalFavorito> ListaCanais { get; set; }
         public CanalFavorito CanalSelecionado { get { return _canalSelecionado; } set { SetProperty(ref _canalSelecionado, value); SelecionouCanal(); } }
+
+        public bool EstaCarregando { get => _estaCarregando; set => SetProperty(ref _estaCarregando, value); }
 
         private Task Inicializacao { get; }
 
@@ -62,58 +56,76 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async Task CarregaCanais()
         {
-            string html = Constantes.BASEURL + $@"/programacao/categoria/Todos";
+            this.EstaCarregando = true;
 
-            HtmlWeb web = new HtmlWeb();
-
-            var htmlDoc = await web.LoadFromWebAsync(html);
-
-            var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
-
-            if (nodes != null)
+            try
             {
-                short i = 0;
+                string html = Constantes.BASEURL + $@"/programacao/categoria/Todos";
 
-                foreach (HtmlNode node in nodes)
+                HtmlWeb web = new HtmlWeb();
+
+                var htmlDoc = await web.LoadFromWebAsync(html);
+
+                var nodes = htmlDoc.DocumentNode.SelectNodes("//ul/li/a");
+
+                if (nodes != null)
                 {
-                    if (node != null && node.Attributes["title"] != null)
+                    short i = 0;
+
+                    foreach (HtmlNode node in nodes)
                     {
-                        var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "licontent").FirstOrDefault();
-
-                        if (c != null)
+                        if (node != null && node.Attributes["title"] != null)
                         {
-                            //Pega o programa atual que está na tag h2
-                            var d = c.ChildNodes.Where(x => x.Name == "h2").FirstOrDefault();
+                            var c = node.Descendants("div").Where(x => x.Attributes["class"].Value == "licontent").FirstOrDefault();
 
-                            CanalFavorito cnl = new CanalFavorito()
+                            if (c != null)
                             {
-                                Id = i++.ToString(),
-                                Nome = d?.InnerHtml.Replace("&amp;", "&"),
-                            };
+                                //Pega o programa atual que está na tag h2
+                                var d = c.ChildNodes.Where(x => x.Name == "h2").FirstOrDefault();
 
-                            this.ListaCanais.Add(cnl);
+                                CanalFavorito cnl = new CanalFavorito()
+                                {
+                                    Id = i++.ToString(),
+                                    Nome = d?.InnerHtml.Replace("&amp;", "&"),
+                                };
+
+                                this.ListaCanais.Add(cnl);
+                            }
                         }
                     }
                 }
+            }
+            finally
+            {
+                this.EstaCarregando = false;
             }
         }
 
         private async Task PegaFavoritos()
         {
-            string lf = await FavoritosService.ListaFavoritos(DevolveIdUsuario());
+            this.EstaCarregando = true;
 
-            if (!String.IsNullOrWhiteSpace(lf))
+            try
             {
-                string[] af = lf.Split(',');
+                string lf = await FavoritosService.ListaFavoritos(DevolveIdUsuario());
 
-                foreach(string s in af)
+                if (!String.IsNullOrWhiteSpace(lf))
                 {
-                    if (int.TryParse(s, out int idx))
+                    string[] af = lf.Split(',');
+
+                    foreach(string s in af)
                     {
-                        CanalFavorito cf = this.ListaCanais[idx];
-                        cf.Checado = true;
+                        if (int.TryParse(s, out int idx))
+                        {
+                            CanalFavorito cf = this.ListaCanais[idx];
+                            cf.Checado = true;
+                        }
                     }
                 }
+            }
+            finally
+            {
+                this.EstaCarregando = false;
             }
         }
 
@@ -124,6 +136,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async Task DoGravar()
         {
+            
             string canaisFavoritos = String.Empty;
 
             var l = ListaCanais.Where(x => x.Checado);
@@ -133,10 +146,23 @@ namespace GCSProgramacaoTV.ViewModels
                     + c.Id
                     + ",";
 
-            string result = await FavoritosService.GravarFavorito(DevolveIdUsuario(), canaisFavoritos);
+            this.EstaCarregando = true;
+            string result = String.Empty;
+
+            try
+            {
+                result = await FavoritosService.GravarFavorito(DevolveIdUsuario(), canaisFavoritos);
+            }
+            finally
+            {
+                this.EstaCarregando = false;
+            }
 
             if (!String.IsNullOrWhiteSpace(result))
                 this.MensagemErro = result;
+            else
+                this.MostraMensagemToast("Favoritos Gravado");
+
         }
     }
 }

@@ -83,7 +83,9 @@ namespace GCSProgramacaoTV.ViewModels
                 //Pega a instância do usuário registrada
                 var u = this.UnityContainer.Resolve<Usuario>();
                 this.ClientName = u.Nome;
-                this.ClientImage = "https://thumbs.dreamstime.com/z/vector-o-%C3%ADcone-do-avatar-do-usu%C3%A1rio-para-site-ou-o-m%C3%B3bil-45836554.jpg";
+                this.ClientImage = "http://www.nexuscapital.com.co/uploads/default/our_teams/2f84609f274c733d6e79312ba5873433.jpg";
+                    //"https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_960_720.png";
+                    //"https://thumbs.dreamstime.com/z/vector-o-%C3%ADcone-do-avatar-do-usu%C3%A1rio-para-site-ou-o-m%C3%B3bil-45836554.jpg";
                 this.MenuItemSelected = this.MenuItems[0];
 
                 short i = 0;

@@ -2,11 +2,13 @@
 using GCSProgramacaoTV.Model.Interfaces;
 using HtmlAgilityPack;
 using Plugin.LocalNotifications;
+using Plugin.Notifications;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
@@ -53,7 +55,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void IniciaComandos()
         {
-            this.CmdLembrar = new DelegateCommand(DoLembrar, CanLembrar);
+            this.CmdLembrar = new DelegateCommand(async () => await DoLembrar(), CanLembrar);
         }
 
         private bool CanLembrar()
@@ -61,10 +63,22 @@ namespace GCSProgramacaoTV.ViewModels
             return (this.Data != null) && (this.DataDateTime > DateTime.Now);
         }
 
-        private void DoLembrar()
+        private async Task DoLembrar()
         {
             try
             {
+                Notification n = new Notification()
+                {
+                    //Date = this.DataDateTime,
+                    Id = DateTime.Now.Minute + DateTime.Now.Second,
+                    Message = $"{this.NomePrograma} no canal { this._canal}",
+                    Title = "Lembrete de Programação",
+                    Vibrate = true,
+                    When = this.DataDateTime.TimeOfDay
+                };
+                //VERIFICAR SE FOI CORRIGIDO POIS ESTÁ MANDANDO A NOTIFICAÇÃO IMEDIATAMENTE
+                //await CrossNotifications.Current.Send(n);
+
                 CrossLocalNotifications.Current.Show("Lembrete de Programação", 
                     $"{this.NomePrograma} no canal { this._canal}",
                     DateTime.Now.Minute + DateTime.Now.Second,

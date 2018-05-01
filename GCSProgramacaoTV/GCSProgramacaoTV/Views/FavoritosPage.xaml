@@ -32,6 +32,11 @@
         </ListView>
 
         <Button Grid.Row="1" Text="Gravar" Command="{Binding GravarCmd}" />
+
+        <ActivityIndicator Grid.Row="0" IsRunning="{Binding EstaCarregando}"
+            IsVisible="{Binding EstaCarregando}" Color="Green"
+                       VerticalOptions="Center" 
+                       HorizontalOptions="Center" />
     </Grid>
 
 </ContentPage>
