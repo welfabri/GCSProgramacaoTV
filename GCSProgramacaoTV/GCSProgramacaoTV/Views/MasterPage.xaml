@@ -9,7 +9,7 @@
 
     <StackLayout>
 
-        <Grid BackgroundColor="#e74c3c"
+        <Grid BackgroundColor="Green"
               HeightRequest="150">
 
             <Grid.RowDefinitions>
@@ -56,7 +56,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Image Source="{Binding IconSource}" />
-                            <Label Grid.Column="1" Text="{Binding Title}" VerticalOptions="FillAndExpand" />
+                            <Label Grid.Column="1" Text="{Binding Title}" TextColor="{Binding Cor, Mode=TwoWay}" VerticalOptions="FillAndExpand" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

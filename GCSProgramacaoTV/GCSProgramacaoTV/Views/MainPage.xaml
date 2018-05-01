@@ -73,13 +73,13 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView> 
 
         </Grid>
 
-        <ActivityIndicator IsRunning="{Binding EstaCarregando}"
-            IsVisible="{Binding EstaCarregando}" Color="Red"
-                       VerticalOptions="FillAndExpand" 
-                       HorizontalOptions="FillAndExpand" />
+        <ActivityIndicator Grid.Row="1" IsRunning="{Binding EstaCarregando}"
+            IsVisible="{Binding EstaCarregando}" Color="Green"
+                       VerticalOptions="Center" 
+                       HorizontalOptions="Center" />
     </Grid>
 </ContentPage>

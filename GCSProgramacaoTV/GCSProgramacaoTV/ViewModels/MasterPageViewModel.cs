@@ -58,7 +58,7 @@ namespace GCSProgramacaoTV.ViewModels
             unityContainer, eventAggregator)
         {
             //Registra para pegar que o login está correto
-            this._tokenOnLoginOk = eventAggregator.GetEvent<DetailClickEvent>().Subscribe(OnLoginOk);
+            this._tokenOnLoginOk = eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLoginOk);
 
             IniciaUsuario();
             CreateMenuItems();            
@@ -68,7 +68,7 @@ namespace GCSProgramacaoTV.ViewModels
         /// Recebe o evento e inicia
         /// </summary>
         /// <param name="page">não é usado</param>
-        private void OnLoginOk(Type page)
+        private void OnLoginOk()
         {
             IniciaUsuario();
         }
@@ -84,7 +84,7 @@ namespace GCSProgramacaoTV.ViewModels
                 var u = this.UnityContainer.Resolve<Usuario>();
                 this.ClientName = u.Nome;
                 this.ClientImage = "https://thumbs.dreamstime.com/z/vector-o-%C3%ADcone-do-avatar-do-usu%C3%A1rio-para-site-ou-o-m%C3%B3bil-45836554.jpg";
-                //                this.MenuItemSelected = this.MenuItems[0];
+                this.MenuItemSelected = this.MenuItems[0];
 
                 short i = 0;
 
@@ -107,8 +107,7 @@ namespace GCSProgramacaoTV.ViewModels
         }
 
         private void OnMenuItem(MasterPageItem item)
-        {
-            
+        {            
             if (item != null)
             {
                 
@@ -126,7 +125,7 @@ namespace GCSProgramacaoTV.ViewModels
                 this.MenuItems = new ObservableCollection<MasterPageItem>()
                 {
                     new MasterPageItem().Preencher("Principal", "Resources/glyphicons_charts.png", nameof(MainPage), typeof(MainPage), true),
-                    new MasterPageItem().Preencher("Entrar", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(RegistroTabbedPage), true),
+                    new MasterPageItem().Preencher("Entrar/Registrar", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(RegistroTabbedPage), true),
                     new MasterPageItem().Preencher("Meus Lembretes", "Resources/glyphicons_charts.png", nameof(MeusLembretesPage), typeof(MeusLembretesPage), false),
                     new MasterPageItem().Preencher("Minhas Informações", "Resources/glyphicons_charts.png", nameof(MinhasInformacoesPage), typeof(MinhasInformacoesPage), false),
                     new MasterPageItem().Preencher("Meus Favoritos", "Resources/glyphicons_charts.png", nameof(FavoritosPage), typeof(FavoritosPage), false),
@@ -134,7 +133,7 @@ namespace GCSProgramacaoTV.ViewModels
                 };                
             }
 
-            //this.MenuItemSelected = this.MenuItems[0];
+            this._menuItemSelected = this.MenuItems[0];
         }
     }
 }

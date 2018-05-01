@@ -57,7 +57,7 @@ namespace GCSProgramacaoTV.ViewModels
             if (u != null)
             {
                 this.UnityContainer.RegisterInstance<Usuario>(u);
-                this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(typeof(MainPage));
+                this.EventAggregatorProperty.GetEvent<LoginEvent>().Publish();
             }
             else
                 this.MensagemErro = "Não foi possível entrar no sistema, usuário e/ou senha inválido(s)";
