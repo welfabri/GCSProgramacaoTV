@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
 {
-    public abstract class ViewModelBase : BindableBase, INavigationAware, IDestructible
+    public abstract class ViewModelBase : BindableBase, IDestructible
     {
         protected INavigationService NavigationService { get; private set; }
         protected IEventAggregator EventAggregatorProperty { get; private set; }
@@ -35,21 +35,6 @@ namespace GCSProgramacaoTV.ViewModels
         protected abstract void IniciaCommands();
 
         //protected abstract void IniciaVM();
-
-        public virtual void OnNavigatedFrom(NavigationParameters parameters)
-        {
-            
-        }
-
-        public virtual void OnNavigatedTo(NavigationParameters parameters)
-        {
-            
-        }
-
-        public virtual void OnNavigatingTo(NavigationParameters parameters)
-        {
-            
-        }
 
         public virtual void Destroy()
         {

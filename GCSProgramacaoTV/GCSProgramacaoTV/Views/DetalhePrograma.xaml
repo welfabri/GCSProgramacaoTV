@@ -17,6 +17,11 @@
             <Button Text="Lembrar" Command="{Binding CmdLembrar}" />
         </StackLayout>
         <Label Grid.Row="1" Text="{Binding Sinopse}" />
+
+        <ActivityIndicator Grid.Row="1" IsRunning="{Binding EstaCarregando}"
+            IsVisible="{Binding EstaCarregando}" Color="Green"
+                       VerticalOptions="Center" 
+                       HorizontalOptions="Center" />
     </Grid>
 
 </ContentPage>

@@ -4,23 +4,24 @@ using HtmlAgilityPack;
 using Plugin.LocalNotifications;
 using Plugin.Notifications;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using Unity;
 using Xamarin.Forms;
 
 namespace GCSProgramacaoTV.ViewModels
 {
-    public class DetalheProgramaViewModel : BindableBase, INavigationAware
-	{
-        private string _nomePrograma, _sinopse, _title, _horario, _canal, _data;
+    public class DetalheProgramaViewModel : ViewModelNavigationBase
+    {
+        private string _nomePrograma, _sinopse, _horario, _canal, _data;
         private HtmlDocument _htmlRetornado;
+        private bool _estaCarregando;
 
         public string NomePrograma { get => _nomePrograma; set { SetProperty(ref _nomePrograma, value); Title = value; } }
-
-        public string Title { get => _title; set => SetProperty(ref _title, value); }
 
         public string Sinopse { get => _sinopse; set => SetProperty(ref _sinopse, value); }
 
@@ -48,12 +49,15 @@ namespace GCSProgramacaoTV.ViewModels
 
         public DelegateCommand CmdLembrar { get; set; }
 
-        public DetalheProgramaViewModel()
+        public bool EstaCarregando { get => _estaCarregando; set => SetProperty(ref _estaCarregando, value); }
+
+        public DetalheProgramaViewModel(INavigationService navigationService,
+            IUnityContainer unityContainer,
+            IEventAggregator eventAggregator) : base(navigationService, unityContainer, eventAggregator)
         {
-            IniciaComandos();
         }
 
-        private void IniciaComandos()
+        protected override void IniciaCommands()
         {
             this.CmdLembrar = new DelegateCommand(async () => await DoLembrar(), CanLembrar);
         }
@@ -91,12 +95,12 @@ namespace GCSProgramacaoTV.ViewModels
             }
         }
 
-        public void OnNavigatedFrom(NavigationParameters parameters)
+        public override void OnNavigatedFrom(NavigationParameters parameters)
         {
 
         }
 
-        public void OnNavigatedTo(NavigationParameters parameters)
+        public override void OnNavigatedTo(NavigationParameters parameters)
         {
             if (parameters.ContainsKey("id"))
             {
@@ -110,7 +114,7 @@ namespace GCSProgramacaoTV.ViewModels
             }
         }
 
-        public void OnNavigatingTo(NavigationParameters parameters)
+        public override void OnNavigatingTo(NavigationParameters parameters)
         {
             //if (parameters.ContainsKey("id"))
             //    MostraDetalhes((string)parameters["id"]);
@@ -174,6 +178,7 @@ namespace GCSProgramacaoTV.ViewModels
             string html = id.Contains("http") ? id : Constantes.BASEURL + id;
 
             HtmlWeb web = new HtmlWeb();
+            this.EstaCarregando = true;
 
             try
             {
@@ -197,6 +202,10 @@ namespace GCSProgramacaoTV.ViewModels
             catch(Exception ex)
             {
                 this.Sinopse = ex.Message;
+            }
+            finally
+            {
+                this.EstaCarregando = false;
             }
         }
     }
