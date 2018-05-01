@@ -8,7 +8,7 @@
 
     <ContentPage.Content>
         <ScrollView>
-        <Grid>
+        <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -17,7 +17,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Label Text="Entre com os dados abaixo para se registrar e obter funcionalidades exclusivas." />
@@ -27,8 +28,10 @@
             <Entry Grid.Row="3" Text="{Binding RepetirSenha, Mode=TwoWay}" IsPassword="True" Placeholder="Repita sua senha" />
             <Entry Grid.Row="4" Text="{Binding Nome, Mode=TwoWay}" Placeholder="Entre com seu nome que deseja ser conhecido" />
             <Entry Grid.Row="5" Text="{Binding Cpf, Mode=TwoWay}" Placeholder="Entre com seu CPF" />
+            <Picker Grid.Row="6" ItemsSource="{Binding ListaSexos}" SelectedItem="{Binding SexoSelecionado}" 
+                        ItemDisplayBinding="{Binding Value}" />
 
-            <Button Grid.Row="6" Text="Registrar" Command="{Binding RegistrarCmd}" />
+            <Button Grid.Row="7" Text="Registrar" Command="{Binding RegistrarCmd}" />
         </Grid>
         </ScrollView>
     </ContentPage.Content>

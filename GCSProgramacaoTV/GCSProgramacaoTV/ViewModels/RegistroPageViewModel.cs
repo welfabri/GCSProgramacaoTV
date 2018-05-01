@@ -9,6 +9,7 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity;
@@ -20,6 +21,7 @@ namespace GCSProgramacaoTV.ViewModels
     {
         private string _email, _senha, _repetirSenha, _nome;
         private string _cpf;
+        private KeyValuePair<string, string> _sexoSelecionado;
 
         public string Email { get { return _email; } set { SetProperty(ref _email, value); } }
 
@@ -30,6 +32,10 @@ namespace GCSProgramacaoTV.ViewModels
         public string Nome { get { return _nome; } set { SetProperty(ref _nome, value); } }
 
         public string Cpf { get { return _cpf; } set { SetProperty(ref _cpf, value); } }
+
+        public ObservableCollection<KeyValuePair<string, string>> ListaSexos { get; set; }
+
+        public KeyValuePair<string, string> SexoSelecionado { get => _sexoSelecionado; set => SetProperty(ref _sexoSelecionado, value); }
 
         public DelegateCommand RegistrarCmd { get; set; }
 
@@ -45,7 +51,13 @@ namespace GCSProgramacaoTV.ViewModels
             IUnityContainer unityContainer,
             IEventAggregator eventAggregator) : base(navigationService, unityContainer, eventAggregator)
         {
+            this.ListaSexos = new ObservableCollection<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("M", "Masculino"),
+                new KeyValuePair<string, string>("F", "Feminino")
+            };
 
+            this.SexoSelecionado = this.ListaSexos[0];
         }
 
         
@@ -66,12 +78,12 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async Task DoRegistrar()
         {
-            Usuario u = await LoginService.Registrar(this.Email, this.Senha, this.Nome, this.Cpf);
+            Usuario u = await LoginService.Registrar(this.Email, this.Senha, this.Nome, this.Cpf, this.SexoSelecionado.Key);
 
             if (u != null)
             {
                 this.UnityContainer.RegisterInstance<Usuario>(u);
-                this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Publish(typeof(MainPage));
+                this.EventAggregatorProperty.GetEvent<LoginEvent>().Publish();
             }
             else
                 this.MensagemErro = "Não foi possível registrar no sistema";

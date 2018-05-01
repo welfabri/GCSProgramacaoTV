@@ -34,7 +34,7 @@ namespace GCSEntities.Services
                         else
                             return null;
                     }
-                } catch(Exception ex)
+                } catch
                 {
                     return null;
                 }
@@ -46,10 +46,11 @@ namespace GCSEntities.Services
             
         }
 
-        public static async Task<Usuario> Registrar(string email, string senha, string nome, string cpf)
+        public static async Task<Usuario> Registrar(string email, string senha, string nome, 
+            string cpf, string sexo)
         {
             WebClient wc = new WebClient();
-            Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/registrar.php?e={email}&p={senha}&n={nome}&c={cpf}");
+            Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/registrar.php?e={email}&p={senha}&n={nome}&c={cpf}&s={sexo}");
 
             NameValueCollection nvc = new NameValueCollection();
             nvc.Add("e", email);
@@ -71,7 +72,7 @@ namespace GCSEntities.Services
                             return null;
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     return null;
                 }

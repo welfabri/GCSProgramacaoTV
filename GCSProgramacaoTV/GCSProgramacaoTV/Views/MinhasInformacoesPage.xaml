@@ -5,21 +5,36 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="GCSProgramacaoTV.Views.MinhasInformacoesPage"
              Title="Minhas Informações">
-
-    <StackLayout>
-        
-        <Label Text="Minhas Informações" />
     
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Nome: " />
-            <Label Text="{Binding Nome}" />
-        </StackLayout>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-        <StackLayout Orientation="Horizontal">
-            <Label Text="E-mail: " />
-            <Label Text="{Binding Email}" />
-        </StackLayout>
-        
-    </StackLayout>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <Label Grid.Column="0" Grid.Row="0" HorizontalTextAlignment="End" Text="Nome: " />
+        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Nome}" />
+
+        <Label Grid.Column="0" Grid.Row="1" HorizontalTextAlignment="End" Text="E-mail: " />
+        <Label Grid.Column="1" Grid.Row="1" Text="{Binding Email}" />
+
+        <Label Grid.Column="0" Grid.Row="2" HorizontalTextAlignment="End" Text="CPF: " />
+        <Label Grid.Column="1" Grid.Row="2" Text="{Binding CPF}" />
+
+        <Label Grid.Column="0" Grid.Row="3" HorizontalTextAlignment="End" Text="Sexo: " />
+        <Label Grid.Column="1" Grid.Row="3" Text="{Binding Sexo}" />
+
+        <!-- Button Grid.Column="0" Grid.Row="4" Text="Alterar Dados..."
+          Command="{Binding AlterarDadosCmd}" Margin="0, 10, 0, 0" / -->
+    </Grid>
+    
 </ContentPage>

@@ -8,7 +8,7 @@
     
     <ContentPage.Content>
 
-        <Grid>
+        <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -16,9 +16,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Label Text="Entre com os dados abaixo para se conectar ao aplicativo ou registre-se para ter funcionalidades exclusivas." />
+            </Grid.RowDefinitions>            
 
             <Entry Grid.Row="1" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email" Placeholder="Entre com seu e-mail" />
             <Entry Grid.Row="2" Text="{Binding Senha, Mode=TwoWay}" IsPassword="True" Placeholder="Entre com sua senha" />
