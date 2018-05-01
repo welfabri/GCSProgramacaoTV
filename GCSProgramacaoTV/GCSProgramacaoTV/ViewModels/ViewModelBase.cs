@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using GCSEntities.Classes;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Unity;
@@ -51,6 +52,17 @@ namespace GCSProgramacaoTV.ViewModels
         public virtual void Destroy()
         {
             
+        }
+
+        protected bool UsuarioLogado()
+        {
+            return this.UnityContainer.IsRegistered<Usuario>();
+        }
+
+        protected int DevolveIdUsuario()
+        {
+            var u = this.UnityContainer.Resolve<Usuario>();
+            return u != null ? u.Id : -1;
         }
     }
 }

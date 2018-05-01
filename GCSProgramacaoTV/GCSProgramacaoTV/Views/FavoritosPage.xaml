@@ -13,17 +13,18 @@
 
         <ListView x:Name="listView" SeparatorVisibility="None" 
                   ItemsSource="{Binding ListaCanais}" 
-                  SelectedItem="{Binding CanalSelecionado, Mode=TwoWay}">
+                  SelectedItem="{Binding CanalSelecionado, Mode=TwoWay}"
+                  RowHeight="30">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Padding="5,10">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30"/>
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <BoxView BackgroundColor="Green" IsVisible="{Binding Checado}" />
-                            <Label Grid.Column="1" Text="{Binding Nome}" VerticalOptions="FillAndExpand" />
+                            <BoxView Margin="10" BackgroundColor="Green" IsVisible="{Binding Checado}" />
+                            <Label FontSize="Small" Grid.Column="1" Text="{Binding Nome}" VerticalOptions="Center" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

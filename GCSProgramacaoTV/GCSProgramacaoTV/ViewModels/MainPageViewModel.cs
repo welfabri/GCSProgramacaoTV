@@ -1,4 +1,5 @@
-﻿using GCSProgramacaoTV.Model;
+﻿using GCSEntities.Services;
+using GCSProgramacaoTV.Model;
 using GCSProgramacaoTV.Model.Classes;
 using HtmlAgilityPack;
 using Prism.Commands;
@@ -110,7 +111,10 @@ namespace GCSProgramacaoTV.ViewModels
                 { CriaChave("Notícias", "Noticias") },
                 { CriaChave("Aberta", "Aberta") },
                 { CriaChave("Htv", "Todos") }
-            };            
+            };
+
+            if (UsuarioLogado())
+                this.ListaGeneros.Add(new KeyValuePair<string, string>("Favoritos", "Todos"));
         }
 
         protected override void IniciaCommands()
@@ -172,6 +176,9 @@ namespace GCSProgramacaoTV.ViewModels
 
                 if (nodes != null)
                 {
+                    short idxCanal = 0;
+                    List<string> listaFavoritos = null;
+
                     foreach (HtmlNode node in nodes)
                     {
                         if (node != null && node.Attributes["title"] != null)
@@ -191,13 +198,30 @@ namespace GCSProgramacaoTV.ViewModels
                                     ProgramaAtual = node.Attributes["title"]?.Value
                                 };
 
-                                if ((GeneroSelecionado.Key.ToLower() != "htv") || Htv.ECanalHtv(cnl.Nome))
+                                if (GeneroSelecionado.Key.ToLower().Equals("favoritos"))
+                                {
+                                    if (listaFavoritos == null)
+                                    {
+                                        string t = await FavoritosService.ListaFavoritos(this.DevolveIdUsuario());
+                                        listaFavoritos = new List<string>(t.Split(','));
+                                    }
+
+                                    if ((listaFavoritos.Count() == 0) || (listaFavoritos[0] == idxCanal.ToString()))
+                                    {
+                                        this.ListaCanais.Add(cnl);
+                                        listaFavoritos.RemoveAt(0);
+                                        this._todosCanais.Add(cnl);
+                                    }
+                                }
+                                else if ((GeneroSelecionado.Key.ToLower() != "htv") || Htv.ECanalHtv(cnl.Nome))
                                 {
                                     this.ListaCanais.Add(cnl);
                                     this._todosCanais.Add(cnl);
                                 }
                             }
                         }
+
+                        idxCanal++;
                     }
                 }
             }

@@ -75,7 +75,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         private void IniciaUsuario()
         {            
-            if (this.UnityContainer.IsRegistered<Usuario>())
+            if (UsuarioLogado())
             {
                 //Retira o evento para colocar o nome do usuário
                 this.EventAggregatorProperty.GetEvent<DetailClickEvent>().Unsubscribe(this._tokenOnLoginOk);
@@ -129,8 +129,8 @@ namespace GCSProgramacaoTV.ViewModels
                     new MasterPageItem().Preencher("Entrar", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(RegistroTabbedPage), true),
                     new MasterPageItem().Preencher("Meus Lembretes", "Resources/glyphicons_charts.png", nameof(MeusLembretesPage), typeof(MeusLembretesPage), false),
                     new MasterPageItem().Preencher("Minhas Informações", "Resources/glyphicons_charts.png", nameof(MinhasInformacoesPage), typeof(MinhasInformacoesPage), false),
-                    new MasterPageItem().Preencher("Meus Favoritos", "Resources/glyphicons_charts.png", nameof(FavoritosPage), typeof(FavoritosPage), true),
-                    new MasterPageItem().Preencher("Configurações", "Resources/glyphicons_charts.png", nameof(RegistroTabbedPage), typeof(MainPage), false)                        
+                    new MasterPageItem().Preencher("Meus Favoritos", "Resources/glyphicons_charts.png", nameof(FavoritosPage), typeof(FavoritosPage), false),
+                    new MasterPageItem().Preencher("Configurações", "Resources/glyphicons_charts.png", nameof(ConfiguracoesPage), typeof(ConfiguracoesPage), true)                        
                 };                
             }
 

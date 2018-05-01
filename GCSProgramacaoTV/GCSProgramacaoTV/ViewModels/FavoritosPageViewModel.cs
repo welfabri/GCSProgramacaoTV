@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Unity;
 using Xamarin.Forms;
 using System.Linq;
+using GCSEntities.Classes;
 
 namespace GCSProgramacaoTV.ViewModels
 {
@@ -99,7 +100,7 @@ namespace GCSProgramacaoTV.ViewModels
 
         private async Task PegaFavoritos()
         {
-            string lf = await FavoritosService.ListaFavoritos(1);
+            string lf = await FavoritosService.ListaFavoritos(DevolveIdUsuario());
 
             if (!String.IsNullOrWhiteSpace(lf))
             {
@@ -132,7 +133,7 @@ namespace GCSProgramacaoTV.ViewModels
                     + c.Id
                     + ",";
 
-            string result = await FavoritosService.GravarFavorito(1, canaisFavoritos);
+            string result = await FavoritosService.GravarFavorito(DevolveIdUsuario(), canaisFavoritos);
 
             if (!String.IsNullOrWhiteSpace(result))
                 this.MensagemErro = result;
