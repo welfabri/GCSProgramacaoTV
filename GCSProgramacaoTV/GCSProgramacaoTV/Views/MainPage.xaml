@@ -18,8 +18,19 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             
-            <Label FontSize="Micro" Text="{Binding DataAtual}" Margin="10,0,10,0" />
-            <Button Grid.Column="1" Text="Atualizar" Command="{Binding CmdAtualizar}" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Picker Grid.Column="0" Grid.Row="0" ItemsSource="{Binding ListaGeneros}" SelectedItem="{Binding GeneroSelecionado}" 
+                        ItemDisplayBinding="{Binding Key}" />
+
+            <SearchBar Grid.Column="0" Grid.Row="1" Text="{Binding TextoBuscarCanais, Mode=TwoWay}" 
+                           HorizontalOptions="StartAndExpand" />
+
+            <Label Grid.Column="1" Grid.Row="0" FontSize="Micro" Text="{Binding DataAtual}" Margin="10,0,10,0" />
+            <Button Grid.Column="1" Grid.Row="1" Text="Atualizar" Command="{Binding CmdAtualizar}" />
         </Grid>
 
         <Grid Grid.Row="1">
@@ -29,37 +40,23 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Picker ItemsSource="{Binding ListaGeneros}" SelectedItem="{Binding GeneroSelecionado}" 
-                        ItemDisplayBinding="{Binding Key}" />
-
-                <SearchBar Grid.Row="1" Text="{Binding TextoBuscarCanais, Mode=TwoWay}" 
-                           HorizontalOptions="StartAndExpand" />
-
-                <ListView Grid.Row="2" x:Name="LstCanais" 
+            <ListView Grid.Column="0" x:Name="LstCanais" 
                           ItemsSource="{Binding ListaCanais}" 
                           SelectedItem="{Binding CanalSelecionado, Mode=TwoWay}"
                           HorizontalOptions="StartAndExpand">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <StackLayout BackgroundColor="#fff" Orientation="Vertical" Padding="5,0,5,1">
-                                    <Label Text="{Binding Nome}" HorizontalOptions="StartAndExpand"  LineBreakMode="NoWrap"
-                                           FontAttributes="Bold" />
-                                    <Label Text="{Binding ProgramaAtual}" HorizontalOptions="StartAndExpand" LineBreakMode="NoWrap"
-                                           TextColor="#503026" FontSize="Micro" VerticalOptions="StartAndExpand" />
-                                </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="#fff" Orientation="Vertical" Padding="5,0,5,1">
+                                <Label Text="{Binding Nome}" HorizontalOptions="StartAndExpand"  LineBreakMode="NoWrap"
+                                        FontAttributes="Bold" />
+                                <Label Text="{Binding ProgramaAtual}" HorizontalOptions="StartAndExpand" LineBreakMode="NoWrap"
+                                        TextColor="#503026" FontSize="Micro" VerticalOptions="StartAndExpand" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <ListView Grid.Column="1" x:Name="LstProximosProgamas" 
                       ItemsSource="{Binding ListaProgramas}" 
