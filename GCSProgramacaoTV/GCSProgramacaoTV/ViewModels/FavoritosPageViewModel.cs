@@ -60,7 +60,7 @@ namespace GCSProgramacaoTV.ViewModels
 
             try
             {
-                string html = Constantes.BASEURL + $@"/programacao/categoria/Todos";
+                string html = Constantes.BASEURL + $@"/programacao/categoria/Filmes";
 
                 HtmlWeb web = new HtmlWeb();
 

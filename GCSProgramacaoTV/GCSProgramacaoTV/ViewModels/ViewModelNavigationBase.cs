@@ -12,10 +12,10 @@ namespace GCSProgramacaoTV.ViewModels
         { 
         }
 
-        public abstract void OnNavigatedFrom(NavigationParameters parameters);
+        public abstract void OnNavigatedFrom(INavigationParameters parameters);
 
-        public abstract void OnNavigatedTo(NavigationParameters parameters);
+        public abstract void OnNavigatedTo(INavigationParameters parameters);
 
-        public abstract void OnNavigatingTo(NavigationParameters parameters);
+        public abstract void OnNavigatingTo(INavigationParameters parameters);
     }
 }

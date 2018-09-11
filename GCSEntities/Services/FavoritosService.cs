@@ -14,10 +14,12 @@ namespace GCSEntities.Services
             WebClient wc = new WebClient();
             Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/favoritossite.php");
 
-            Dictionary<string, string> nvc = new Dictionary<string, string>();
-            nvc.Add("idusuario", idUsuario.ToString());
-            nvc.Add("canaisfavoritos", listaCanaisFavoritos);
-            nvc.Add("acao", "i");
+            Dictionary<string, string> nvc = new Dictionary<string, string>
+            {
+                { "idusuario", idUsuario.ToString() },
+                { "canaisfavoritos", listaCanaisFavoritos },
+                { "acao", "i" }
+            };
             var content = new FormUrlEncodedContent(nvc);
 
             using (var myHttpClient = new HttpClient())
@@ -48,9 +50,11 @@ namespace GCSEntities.Services
             WebClient wc = new WebClient();
             Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/favoritossite.php");
 
-            Dictionary<string, string> nvc = new Dictionary<string, string>();
-            nvc.Add("idusuario", idUsuario.ToString());            
-            nvc.Add("acao", "c");
+            Dictionary<string, string> nvc = new Dictionary<string, string>
+            {
+                { "idusuario", idUsuario.ToString() },
+                { "acao", "c" }
+            };
             var content = new FormUrlEncodedContent(nvc);
 
             using (var myHttpClient = new HttpClient())

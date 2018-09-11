@@ -101,7 +101,7 @@ namespace GCSProgramacaoTV.ViewModels
             this.ListaProgramas = new ObservableCollection<Programa>();
             this.ListaGeneros = new ObservableCollection<KeyValuePair<String, String>>()
             {
-                { CriaChave("Todos", "Todos") }, 
+             //   { CriaChave("Todos", "Todos") }, 
                 { CriaChave("Filmes", "Filmes") },
                 { CriaChave("Séries", "Series") },
                 { CriaChave("Esportes", "Esportes") },

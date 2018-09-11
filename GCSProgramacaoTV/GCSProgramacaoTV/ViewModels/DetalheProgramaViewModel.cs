@@ -95,12 +95,12 @@ namespace GCSProgramacaoTV.ViewModels
             }
         }
 
-        public override void OnNavigatedFrom(NavigationParameters parameters)
+        public override void OnNavigatedFrom(INavigationParameters parameters)
         {
 
         }
 
-        public override void OnNavigatedTo(NavigationParameters parameters)
+        public override void OnNavigatedTo(INavigationParameters parameters)
         {
             if (parameters.ContainsKey("id"))
             {
@@ -114,7 +114,7 @@ namespace GCSProgramacaoTV.ViewModels
             }
         }
 
-        public override void OnNavigatingTo(NavigationParameters parameters)
+        public override void OnNavigatingTo(INavigationParameters parameters)
         {
             //if (parameters.ContainsKey("id"))
             //    MostraDetalhes((string)parameters["id"]);

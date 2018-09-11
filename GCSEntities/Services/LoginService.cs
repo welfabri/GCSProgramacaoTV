@@ -15,9 +15,11 @@ namespace GCSEntities.Services
             WebClient wc = new WebClient();
             Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/?e={usuario}&p={senha}");
 
-            NameValueCollection nvc = new NameValueCollection();
-            nvc.Add("e", usuario);
-            nvc.Add("p", senha);
+            NameValueCollection nvc = new NameValueCollection
+            {
+                { "e", usuario },
+                { "p", senha }
+            };
 
             using (var myHttpClient = new HttpClient())
             {
@@ -52,9 +54,11 @@ namespace GCSEntities.Services
             WebClient wc = new WebClient();
             Uri uri = new Uri($"{GCSConstantes.HOSTPRINCIPAL}/registrar.php?e={email}&p={senha}&n={nome}&c={cpf}&s={sexo}");
 
-            NameValueCollection nvc = new NameValueCollection();
-            nvc.Add("e", email);
-            nvc.Add("p", senha);
+            NameValueCollection nvc = new NameValueCollection
+            {
+                { "e", email },
+                { "p", senha }
+            };
 
             using (var myHttpClient = new HttpClient())
             {
